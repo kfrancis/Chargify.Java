@@ -24,8 +24,8 @@
 
 package com.chargify.core;
 
-import com.chargify.util.StringOutputStream;
 import com.github.kevinsawicki.http.HttpRequest;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.*;
+import org.simpleframework.xml.stream.Format;
 
 /**
  *
@@ -78,6 +79,7 @@ public class ChargifyClient {
             String response = performGet("customers.xml");
             System.out.println(response);
             
+            StringWriter writer = new StringWriter();
             Serializer deserializer = new Persister();
             //result = deserializer.read(Customer.class, response);
            
@@ -137,22 +139,29 @@ public class ChargifyClient {
     }
     
     /**
-     *
-     * @param customer
+     * Create a customer
+     * @param customer      The customer to create
+     * @return  Customer    The resulting customer
      */
-    public void createCustomer(Customer customer) {
+    public Customer createCustomer(Customer customer) {
         try {
-            Serializer serializer = new Persister();
-            StringOutputStream outStream = new StringOutputStream();
-            serializer.write(customer, outStream);
+            StringWriter writer = new StringWriter();
+            Format format = new Format("<?xml version=\"1.0\" encoding= \"UTF-8\" ?>");
+            Serializer serializer = new Persister(format);
+            serializer.write(customer, writer);
+            String input = writer.toString();
             
-            String response = performPost("customers.xml", outStream.toString());
+            String response = performPost("customers.xml", input);
             
-            System.out.println(response);
+            Serializer deserializer = new Persister();
+            Customer result = deserializer.read(Customer.class, response);
             
+            return result;
         } catch (Exception ex) {
             Logger.getLogger(ChargifyClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return null;
     }
     
     /**
@@ -162,11 +171,13 @@ public class ChargifyClient {
      */
     public Customer updateCustomer(Customer customer) {
         try {
-            Serializer serializer = new Persister();
-            StringOutputStream outStream = new StringOutputStream();
-            serializer.write(customer, outStream);
+            StringWriter writer = new StringWriter();
+            Format format = new Format("<?xml version=\"1.0\" encoding= \"UTF-8\" ?>");
+            Serializer serializer = new Persister(format);
+            serializer.write(customer, writer);
+            String input = writer.toString();
             
-            String response = performPost("customers.xml", outStream.toString());
+            String response = performPost("customers.xml", input);
             System.out.println(response);
             
             Serializer deserializer = new Persister();
@@ -181,6 +192,11 @@ public class ChargifyClient {
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="Utility Methods">
+    private String getMethodExtension()
+    {
+        return (this.UseJSON == true) ? "json" : "xml";
+    }
+    
     private String performGet(String methodPart) throws MalformedURLException
     {
         String output = "";
@@ -189,6 +205,7 @@ public class ChargifyClient {
             URL url = new URL(address);
             HttpRequest request = HttpRequest.get(url);
             request.basic(this.ApiKey, this.ApiPassword);
+            request.accept(String.format("application/%s", getMethodExtension()));
             output = request.body();
         } catch (MalformedURLException ex) {
             Logger.getLogger(ChargifyClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -205,6 +222,8 @@ public class ChargifyClient {
             URL url = new URL(address);
             HttpRequest request = HttpRequest.post(url);
             request.basic(this.ApiKey, this.ApiPassword);
+            request.contentType(String.format("application/%s", getMethodExtension()));
+            request.accept(String.format("application/%s", getMethodExtension()));
             request.send(data);
             output = request.body();
         } catch (MalformedURLException ex) {

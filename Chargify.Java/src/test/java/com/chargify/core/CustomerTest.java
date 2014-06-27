@@ -26,10 +26,11 @@ package com.chargify.core;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -181,6 +182,7 @@ public class CustomerTest {
      * Test of getId method, of class Customer.
      */
     @Test
+    @Ignore
     public void testGetId() {
         System.out.println("getId");
         Customer instance = new Customer();

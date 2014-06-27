@@ -24,14 +24,18 @@
 
 package com.chargify.core;
 
+import org.simpleframework.xml.Default;
+import org.simpleframework.xml.DefaultType;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Transient;
 
 /**
  *
  * @author kfrancis
  */
-@Root
+@Root(strict=false)
+@Default(DefaultType.FIELD)
 public class Customer {
 
     //<editor-fold defaultstate="collapsed" desc="Constructors">
@@ -49,21 +53,46 @@ public class Customer {
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Properties">
-    @Element
     private String first_name = "";
-    @Element
     private String last_name = "";
-    @Element
     private String email = "";
-    @Element
+    @Element(required=false)
     private String organization = "";
-    @Element
+    @Element(required=false)
     private String reference = "";
     @Element(required=false)
-    private Integer id = Integer.MIN_VALUE;
+    private String address = "";
     @Element(required=false)
+    private String address_2 = "";
+    @Element(required=false)
+    private String city = "";
+    @Element(required=false)
+    private String state = "";
+    @Element(required=false)
+    private String zip = "";
+    @Element(required=false)
+    private String country = "";
+    @Element(required=false)
+    private String phone = "";
+    
+    @Transient
+    private boolean verified; 
+    
+    @Transient
+    private String portal_customer_created_at = "";
+    
+    @Transient
+    private String portal_invite_last_sent_at = "";
+    
+    @Transient
+    private String portal_invite_last_accepted_at = "";
+    
+    private int id;
+    
+    @Transient
     private String created_at = "";
-    @Element(required=false)
+    
+    @Transient
     private String updated_at = "";
     
     public String getFirst_name() {
