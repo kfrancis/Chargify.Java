@@ -72,4 +72,6 @@ nb-configuration.xml
 
 # KDE directory preferences
 .directory
-/Chargify.Java/target/
+/Chargify.Java/target/Chargify.Java/.idea/
+Chargify.Java/Chargify.Java.iml
+Chargify.Java/.idea
