@@ -21,15 +21,12 @@ public class Customer {
         super();
     }
     
-    public Customer(String first_name, String last_name, String email, String organization, String reference, Integer id, String created_at, String updated_at) {
+    public Customer(String first_name, String last_name, String email, String organization, String reference) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.email = email;
         this.organization = organization;
         this.reference = reference;
-        this.id = id;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
     }
     //</editor-fold>
 
@@ -44,11 +41,11 @@ public class Customer {
     private String organization;
     @Element
     private String reference;
-    @Element
+    @Element(required=false)
     private Integer id;
-    @Element
+    @Element(required=false)
     private String created_at;
-    @Element
+    @Element(required=false)
     private String updated_at;
     
     public String getFirst_name() {
@@ -95,24 +92,12 @@ public class Customer {
         return id;
     }
     
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    
     public String getCreated_at() {
         return created_at;
     }
-    
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
-    }
-    
+   
     public String getUpdated_at() {
         return updated_at;
-    }
-    
-    public void setUpdated_at(String updated_at) {
-        this.updated_at = updated_at;
     }
 //</editor-fold>
 
