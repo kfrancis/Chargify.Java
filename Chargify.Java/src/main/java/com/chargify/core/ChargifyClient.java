@@ -10,6 +10,7 @@ import com.chargify.util.StringOutputStream;
 import com.github.kevinsawicki.http.HttpRequest;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.*;
@@ -49,13 +50,59 @@ public class ChargifyClient {
     //<editor-fold defaultstate="collapsed" desc="Customer">
 
     /**
-     *
-     * @param Id
+     * Retrieve a list of customers
+     * @return  ArrayList<Customer> The list of customers
+     */
+    
+    public ArrayList<Customer> getCustomers() {
+        ArrayList<Customer> result = new ArrayList<Customer>();
+        try {
+            String response = performGet("customers.xml");
+            System.out.println(response);
+            
+            Serializer deserializer = new Persister();
+            //result = deserializer.read(Customer.class, response);
+           
+        } catch (Exception ex) {
+            Logger.getLogger(ChargifyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Retrieve a customer from Chargify
+     * @param   Id          The id of the customer to retrieve
+     * @return  Customer    The customer
      */
     public Customer getCustomer(int Id)
     {
         try {
             String response = performGet(String.format("customers/%s.xml", Id));
+            System.out.println(response);
+            
+            Serializer deserializer = new Persister();
+            Customer result = deserializer.read(Customer.class, response);
+            
+            return result;
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ChargifyClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ChargifyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Retrieve a customer from Chargify
+     * @param reference     The reference value of the customer
+     * @return  Customer    The customer
+     */
+    public Customer getCustomer(String reference)
+    {
+        try {
+            String response = performGet(String.format("customers/lookup.xml?reference=%s", reference));
             System.out.println(response);
             
             Serializer deserializer = new Persister();

@@ -10,10 +10,11 @@ import java.util.HashSet;
 import java.util.Set;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -44,7 +45,8 @@ public class ChargifyClientTest extends TestBase {
     /**
      * Test of CreateCustomer method, of class ChargifyClient.
      */
-    @org.junit.Test
+    @Ignore
+    @Test
     public void testCreateCustomer() {
         System.out.println("CreateCustomer");
         
@@ -61,6 +63,7 @@ public class ChargifyClientTest extends TestBase {
     /**
      * Test of getCustomer method, of class ChargifyClient.
      */
+    @Ignore
     @Test
     public void testGetCustomer() {
         System.out.println("getCustomer");
@@ -78,6 +81,7 @@ public class ChargifyClientTest extends TestBase {
     /**
      * Test of updateCustomer method, of class ChargifyClient.
      */
+    @Ignore
     @Test
     public void testUpdateCustomer() {
         System.out.println("updateCustomer");
