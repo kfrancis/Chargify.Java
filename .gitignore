@@ -72,3 +72,4 @@ nb-configuration.xml
 
 # KDE directory preferences
 .directory
+/Chargify.Java/target/
