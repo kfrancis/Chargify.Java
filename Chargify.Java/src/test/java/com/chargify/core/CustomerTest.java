@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 kfrancis.
+ * Copyright 2014 kfrancis, jeremywrowe.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
