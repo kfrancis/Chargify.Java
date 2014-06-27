@@ -50,21 +50,21 @@ public class Customer {
 
     //<editor-fold defaultstate="collapsed" desc="Properties">
     @Element
-    private String first_name;
+    private String first_name = "";
     @Element
-    private String last_name;
+    private String last_name = "";
     @Element
-    private String email;
+    private String email = "";
     @Element
-    private String organization;
+    private String organization = "";
     @Element
-    private String reference;
+    private String reference = "";
     @Element(required=false)
-    private Integer id;
+    private Integer id = Integer.MIN_VALUE;
     @Element(required=false)
-    private String created_at;
+    private String created_at = "";
     @Element(required=false)
-    private String updated_at;
+    private String updated_at = "";
     
     public String getFirst_name() {
         return first_name;
