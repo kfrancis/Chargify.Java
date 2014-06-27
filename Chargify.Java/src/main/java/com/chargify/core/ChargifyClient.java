@@ -7,7 +7,9 @@
 package com.chargify.core;
 
 import com.chargify.util.StringOutputStream;
-import java.io.*;
+import com.github.kevinsawicki.http.HttpRequest;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.simpleframework.xml.*;
@@ -44,22 +46,107 @@ public class ChargifyClient {
     }
     //</editor-fold>
     
-    public void CreateCustomer(Customer customer) {
+    //<editor-fold defaultstate="collapsed" desc="Customer">
+
+    /**
+     *
+     * @param Id
+     */
+    public Customer getCustomer(int Id)
+    {
+        try {
+            String response = performGet(String.format("customers/%s.xml", Id));
+            System.out.println(response);
+            
+            Serializer deserializer = new Persister();
+            Customer result = deserializer.read(Customer.class, response);
+            
+            return result;
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ChargifyClient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(ChargifyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
+    /**
+     *
+     * @param customer
+     */
+    public void createCustomer(Customer customer) {
         try {
             Serializer serializer = new Persister();
             StringOutputStream outStream = new StringOutputStream();
             serializer.write(customer, outStream);
             
-            // Hmm, need the xml in a string.
-            System.out.println(outStream.toString());
+            String response = performPost("customers.xml", outStream.toString());
+            
+            System.out.println(response);
+            
         } catch (Exception ex) {
             Logger.getLogger(ChargifyClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    private String DoRequest() {
+    /**
+     *
+     * @param customer
+     * @return
+     */
+    public Customer updateCustomer(Customer customer) {
+        try {
+            Serializer serializer = new Persister();
+            StringOutputStream outStream = new StringOutputStream();
+            serializer.write(customer, outStream);
+            
+            String response = performPost("customers.xml", outStream.toString());
+            System.out.println(response);
+            
+            Serializer deserializer = new Persister();
+            Customer result = deserializer.read(Customer.class, response);
+            
+            return result;
+        } catch (Exception ex) {
+            Logger.getLogger(ChargifyClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="Utility Methods">
+    private String performGet(String methodPart) throws MalformedURLException
+    {
         String output = "";
-        
+        try {
+            String address = String.format("%s%s%s", this.URL, (this.URL.endsWith("/") ? "" : "/"), methodPart);
+            URL url = new URL(address);
+            HttpRequest request = HttpRequest.get(url);
+            request.basic(this.ApiKey, this.ApiPassword);
+            output = request.body();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ChargifyClient.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
         return output;
     }
+    
+    private String performPost(String methodPart, String data) throws MalformedURLException
+    {
+        String output = "";
+        try {
+            String address = String.format("%s%s%s", this.URL, (this.URL.endsWith("/") ? "" : "/"), methodPart);
+            URL url = new URL(address);
+            HttpRequest request = HttpRequest.post(url);
+            request.basic(this.ApiKey, this.ApiPassword);
+            request.send(data);
+            output = request.body();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(ChargifyClient.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
+        }
+        return output;
+    }
+    //</editor-fold>
 }

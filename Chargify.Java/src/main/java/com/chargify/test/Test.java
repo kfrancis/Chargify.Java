@@ -18,6 +18,6 @@ public class Test {
         ChargifyClient client = new ChargifyClient("https://subdomain.chargify.com", "", "X");
         
         Customer customer = new Customer("Kori", "Francis", "kori@chargify.com", "Chargify", java.util.UUID.randomUUID().toString());
-        client.CreateCustomer(customer);
+        client.createCustomer(customer);
     }
 }
