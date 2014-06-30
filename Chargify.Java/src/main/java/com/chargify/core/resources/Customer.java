@@ -26,7 +26,9 @@ package com.chargify.core.resources;
 
 import com.chargify.core.Client;
 import com.chargify.core.ClientFactory;
-import com.chargify.core.Configuration;
+import com.github.kevinsawicki.http.HttpRequest;
+import lombok.Getter;
+import lombok.Setter;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -37,20 +39,20 @@ import java.util.ArrayList;
 @Default(DefaultType.FIELD)
 public class Customer extends Resource {
 
-    @Element private int id;
-    @Element private String email = "";
-    @Element(name="first_name") private String firstName = "";
-    @Element(name="last_name")  private String lastName = "";
+    @Getter @Setter @Element private int id;
+    @Getter @Setter @Element private String email = "";
+    @Getter @Setter @Element(name="first_name") private String firstName = "";
+    @Getter @Setter @Element(name="last_name")  private String lastName = "";
 
-    @Element(required=false) private String organization = "";
-    @Element(required=false) private String reference = "";
-    @Element(required=false) private String address = "";
-    @Element(name="address_2", required=false) private String address2 = "";
-    @Element(required=false) private String city = "";
-    @Element(required=false) private String state = "";
-    @Element(required=false) private String zip = "";
-    @Element(required=false) private String country = "";
-    @Element(required=false) private String phone = "";
+    @Getter @Setter @Element(required=false) private String organization = "";
+    @Getter @Setter @Element(required=false) private String reference = "";
+    @Getter @Setter @Element(required=false) private String address = "";
+    @Getter @Setter @Element(name="address_2", required=false) private String address2 = "";
+    @Getter @Setter @Element(required=false) private String city = "";
+    @Getter @Setter @Element(required=false) private String state = "";
+    @Getter @Setter @Element(required=false) private String zip = "";
+    @Getter @Setter @Element(required=false) private String country = "";
+    @Getter @Setter @Element(required=false) private String phone = "";
 
     @Transient private boolean verified;
     @Transient private String portalCustomerCreatedAt = "";
@@ -61,12 +63,18 @@ public class Customer extends Resource {
 
     public static Customer find(int id) throws Exception {
         Client client = ClientFactory.build();
-        // TODO: request should be returned instead of response
-        //       so that we can check the return code. and respond
-        //       with errors.
-        String response = client.get("customers/" + id);
-        Serializer deserializer = new Persister();
-        return deserializer.read(Customer.class, response);
+        return find(client, id);
+    }
+
+    public static Customer find(Client client, int id) throws Exception {
+        HttpRequest request = client.get("customers/" + id);
+        if(request.ok()) {
+            Serializer deserializer = new Persister();
+            return deserializer.read(Customer.class, request.body());
+        }
+        else {
+            return new Customer();
+        }
     }
 
     public static Customer find(String reference) {

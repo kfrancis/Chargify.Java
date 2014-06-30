@@ -27,7 +27,7 @@ package com.chargify.core.resources;
 import com.chargify.core.Client;
 import com.chargify.core.ClientFactory;
 
-public class Resource {
+public abstract class Resource {
 
     private final Client client;
 

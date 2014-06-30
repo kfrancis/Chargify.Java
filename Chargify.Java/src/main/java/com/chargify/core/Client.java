@@ -37,28 +37,28 @@ public class Client {
     public Client()                    { this.requester = new Requester(); }
     public Client(Requester requester) { this.requester = requester; }
 
-    public String get(String path) throws Exception {
+    public HttpRequest get(String path) throws Exception {
         String address = getAdddress(path);
         HttpRequest request = requester.get(address, Configuration.apiKey, Configuration.apiPassword, requestType());
-        return request.body();
+        return request;
     }
 
-    public String post(String path) throws Exception {
+    public HttpRequest post(String path) throws Exception {
         String address = getAdddress(path);
         HttpRequest request = requester.post(address, Configuration.apiKey, Configuration.apiPassword, requestType());
-        return request.body();
+        return request;
     }
     
-    public String put(String path) throws Exception {
+    public HttpRequest put(String path) throws Exception {
         String address = getAdddress(path);
         HttpRequest request = requester.put(address, Configuration.apiKey, Configuration.apiPassword, requestType());
-        return request.body();
+        return request;
     }
     
-    public String delete(String path) throws Exception {
+    public HttpRequest delete(String path) throws Exception {
         String address = getAdddress(path);
         HttpRequest request = requester.delete(address, Configuration.apiKey, Configuration.apiPassword, requestType());
-        return request.body();
+        return request;
     }
 
     private String getAdddress(String path) {
