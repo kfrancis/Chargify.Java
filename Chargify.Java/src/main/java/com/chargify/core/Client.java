@@ -26,6 +26,10 @@ package com.chargify.core;
 
 import com.github.kevinsawicki.http.HttpRequest;
 
+/**
+ *
+ * @author jeremywrowe, kfrancis
+ */
 public class Client {
 
     private final Requester requester;
@@ -42,6 +46,18 @@ public class Client {
     public String post(String path) throws Exception {
         String address = getAdddress(path);
         HttpRequest request = requester.post(address, Configuration.apiKey, Configuration.apiPassword, requestType());
+        return request.body();
+    }
+    
+    public String put(String path) throws Exception {
+        String address = getAdddress(path);
+        HttpRequest request = requester.put(address, Configuration.apiKey, Configuration.apiPassword, requestType());
+        return request.body();
+    }
+    
+    public String delete(String path) throws Exception {
+        String address = getAdddress(path);
+        HttpRequest request = requester.delete(address, Configuration.apiKey, Configuration.apiPassword, requestType());
         return request.body();
     }
 

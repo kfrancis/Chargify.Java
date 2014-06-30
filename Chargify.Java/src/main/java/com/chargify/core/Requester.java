@@ -29,7 +29,7 @@ import java.net.URL;
 
 /**
  *
- * @author Jeremy
+ * @author jeremywrowe, kfrancis
  */
 public class Requester {
 
