@@ -27,7 +27,21 @@ package com.chargify.core;
 import com.github.kevinsawicki.http.HttpRequest;
 import java.net.URL;
 
-class Requester {
+/**
+ *
+ * @author Jeremy
+ */
+public class Requester {
+
+    /**
+     * (http) get
+     * @param address       The address of the API
+     * @param apiKey        The username for basic authentication
+     * @param apiPassword   The password for basic authentication
+     * @param requestType   The URI part of the API method
+     * @return              The request object
+     * @throws Exception
+     */
     public HttpRequest get(String address, String apiKey, String apiPassword, String requestType) throws Exception {
         HttpRequest request = HttpRequest.get(new URL(address));
         request.basic(apiKey, apiPassword);
@@ -35,8 +49,49 @@ class Requester {
         return request;
     }
 
+    /**
+     * (http) post
+     * @param address       The address of the API
+     * @param apiKey        The username for basic authentication
+     * @param apiPassword   The password for basic authentication
+     * @param requestType   The URI part of the API method
+     * @return              The request object
+     * @throws Exception
+     */
     public HttpRequest post(String address, String apiKey, String apiPassword, String requestType) throws Exception {
         HttpRequest request = HttpRequest.post(new URL(address));
+        request.basic(apiKey, apiPassword);
+        request.accept(String.format("application/%s", requestType));
+        return request;
+    }
+    
+    /**
+     * (http) put
+     * @param address       The address of the API
+     * @param apiKey        The username for basic authentication
+     * @param apiPassword   The password for basic authentication
+     * @param requestType   The URI part of the API method
+     * @return              The request object
+     * @throws Exception
+     */
+    public HttpRequest put(String address, String apiKey, String apiPassword, String requestType) throws Exception {
+        HttpRequest request = HttpRequest.put(new URL(address));
+        request.basic(apiKey, apiPassword);
+        request.accept(String.format("application/%s", requestType));
+        return request;
+    }
+    
+    /**
+     * (http) delete
+     * @param address       The address of the API
+     * @param apiKey        The username for basic authentication
+     * @param apiPassword   The password for basic authentication
+     * @param requestType   The URI part of the API method
+     * @return              The request object
+     * @throws Exception
+     */
+    public HttpRequest delete(String address, String apiKey, String apiPassword, String requestType) throws Exception {
+        HttpRequest request = HttpRequest.delete(new URL(address));
         request.basic(apiKey, apiPassword);
         request.accept(String.format("application/%s", requestType));
         return request;
