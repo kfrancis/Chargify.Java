@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 kfrancis.
+ * Copyright 2014 kfrancis, jeremywrowe.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,21 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.chargify.core;
 
-package com.chargify.test;
-
-import com.chargify.core.ChargifyClient;
-import com.chargify.core.Customer;
-
-/**
- *
- * @author kfrancis
- */
-public class Test {
-    public static void main(String[] args) {
-        ChargifyClient client = new ChargifyClient("https://subdomain.chargify.com", "", "X");
-        
-        Customer customer = new Customer("Kori", "Francis", "kori@chargify.com", "Chargify Java", java.util.UUID.randomUUID().toString());
-        client.createCustomer(customer);
+public class ClientFactory {
+    public static Client build() {
+        return new Client();
     }
 }

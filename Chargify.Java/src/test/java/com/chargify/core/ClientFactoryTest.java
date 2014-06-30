@@ -24,28 +24,14 @@
 
 package com.chargify.core;
 
-/**
- *
- * @author kfrancis
- */
-public class TestBase {
-    
-    private final String URL;
-    private final String ApiKey;
-    private final String ApiPassword;
-    private ChargifyClient Client;
+import org.junit.Test;
 
-    public TestBase() {
-        this.URL = "https://subdomain.chargify.com";
-        this.ApiKey = "";
-        this.ApiPassword = "X";
-    }
-    
-    public ChargifyClient getClient()
-    {
-        if (this.Client == null) {
-            this.Client = new ChargifyClient(this.URL, this.ApiKey, this.ApiPassword);
-        }
-        return this.Client;
+import static org.junit.Assert.*;
+
+public class ClientFactoryTest {
+
+    @Test
+    public void testCreatesAnInstanceOfChargifyClient() throws Exception {
+        assertEquals("did not return a Client", Client.class, ClientFactory.build().getClass());
     }
 }
