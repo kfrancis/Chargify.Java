@@ -6,6 +6,8 @@ import com.github.kevinsawicki.http.HttpRequest;
 import org.easymock.Mock;
 import org.junit.Before;
 import org.junit.Test;
+import lombok.Getter;
+import lombok.Setter;
 import org.easymock.EasyMockSupport;
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
