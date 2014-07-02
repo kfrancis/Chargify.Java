@@ -39,6 +39,22 @@ public class CustomerTest extends EasyMockSupport {
         assertEquals("Wrong Customer last name", "Rowe", customer.getLastName());
     }
 
+    @Test
+    public void testFindRecordNotFound() throws Exception {
+        expect(client.get("customers/10")).andReturn(request);
+        expect(request.body()).andReturn(" ");
+        expect(request.ok()).andReturn(false);
+        replayAll();
+
+        try {
+            Customer.find(client, 10);
+            fail("Should have raised RecordNotFoundException");
+        } catch (RecordNotFoundException ex) {
+            assertEquals("Wrong message", "Customer 10 not found", ex.getMessage());
+        }
+    }
+
+
     private String okResponse = "" +
     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
     "<customer>" +

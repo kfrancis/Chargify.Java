@@ -34,6 +34,7 @@ import org.simpleframework.xml.core.Persister;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @Root(strict=false)
 @Default(DefaultType.FIELD)
@@ -62,8 +63,7 @@ public class Customer extends Resource {
     @Transient private String updatedAt = "";
 
     public static Customer find(int id) throws Exception {
-        Client client = ClientFactory.build();
-        return find(client, id);
+        return find(ClientFactory.build(), id);
     }
 
     public static Customer find(Client client, int id) throws Exception {
@@ -73,18 +73,23 @@ public class Customer extends Resource {
             return deserializer.read(Customer.class, request.body());
         }
         else {
-            return new Customer();
+            throw new RecordNotFoundException("Customer " + id + " not found");
         }
     }
 
-    public static Customer find(String reference) {
+    public static Customer findByReference(String reference) {
+        return findByReference(ClientFactory.build(), reference);
+    }
 
+    public static Customer findByReference(Client client, String reference) {
         throw new NotImplementedException();
     }
 
-
-
     public static ArrayList<Customer> all() {
+        throw new NotImplementedException();
+    }
+
+    public Customer create(HashMap attributes) {
         throw new NotImplementedException();
     }
 
