@@ -25,6 +25,7 @@
 package com.chargify.core;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class Configuration {
     public static String  url         = null;
@@ -36,13 +37,24 @@ public class Configuration {
     public static boolean cvvRequired = false;
 
     public static void setup(HashMap config) {
-        Configuration.url         = (String)  config.getOrDefault("url",         Configuration.url);
-        Configuration.subdomain   = (String)  config.getOrDefault("subdomain",   Configuration.subdomain);
-        Configuration.apiKey      = (String)  config.getOrDefault("apiKey",      Configuration.apiKey);
-        Configuration.apiPassword = (String)  config.getOrDefault("apiPassword", Configuration.apiPassword);
-        Configuration.sharedKey   = (String)  config.getOrDefault("sharedKey",   Configuration.sharedKey);
-        Configuration.json        = (boolean) config.getOrDefault("json",        Configuration.json);
-        Configuration.cvvRequired = (boolean) config.getOrDefault("cvvRequired", Configuration.cvvRequired);
+        Configuration.url         = (String)  config.get("url");
+        Configuration.subdomain   = (String)  config.get("subdomain");
+        Configuration.apiKey      = (String)  config.get("apiKey");
+        Configuration.apiPassword = (String)  config.get("apiPassword");
+        Configuration.sharedKey   = (String)  config.get("sharedKey");
+        Configuration.json        = (boolean) config.get("json");
+        Configuration.cvvRequired = (boolean) config.get("cvvRequired");
+    }
+
+    public static void load() {
+        Map<String, String> env = System.getenv();
+        Configuration.url         = env.get("CHARGIFY_URL");
+        Configuration.subdomain   = env.get("CHARGIFY_SUBDOMAIN");
+        Configuration.apiKey      = env.get("CHARGIFY_API_KEY");
+        Configuration.apiPassword = env.get("CHARGIFY_API_PASSWORD");
+        Configuration.sharedKey   = env.get("CHARGIFY_SHARED_KEY");
+        Configuration.json        = Boolean.getBoolean(env.get("CHARGIFY_USE_JSON"));
+        Configuration.cvvRequired = Boolean.getBoolean(env.get("CHARGIFY_CVV_REQUIRED"));
     }
 
     public static void reset() {

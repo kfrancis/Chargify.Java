@@ -26,6 +26,7 @@ package com.chargify.core.resources;
 
 import com.chargify.core.Client;
 import com.chargify.core.ClientFactory;
+import com.chargify.core.helpers.Maps;
 import com.github.kevinsawicki.http.HttpRequest;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,8 +34,12 @@ import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 @Root(strict=false)
 @Default(DefaultType.FIELD)
@@ -77,16 +82,33 @@ public class Customer extends Resource {
         }
     }
 
-    public static Customer findByReference(String reference) {
+    public static Customer findByReference(String reference) throws Exception {
         return findByReference(ClientFactory.build(), reference);
     }
 
-    public static Customer findByReference(Client client, String reference) {
-        throw new NotImplementedException();
+    public static Customer findByReference(Client client, String reference) throws Exception {
+        HttpRequest request = client.get("customers/lookup", Maps.of("reference", reference));
+        if(request.ok()) {
+            Serializer deserializer = new Persister();
+            return deserializer.read(Customer.class, request.body());
+        } else {
+            throw new RecordNotFoundException("Customer " + reference + " not found");
+        }
     }
 
-    public static ArrayList<Customer> all() {
-        throw new NotImplementedException();
+    public static List<Customer> all(Client client) throws Exception {
+        HttpRequest request = client.get("customers");
+        Serializer deserializer = new Persister();
+
+        if(request.ok()) {
+            return deserializer.read(CustomerList.class, request.body()).getCustomers();
+        } else {
+           throw new Exception("Could not parse /customers.xml. Please verify your credentials");
+        }
+    }
+
+    public static List<Customer> all() throws Exception {
+        return all(ClientFactory.build());
     }
 
     public Customer create(HashMap attributes) {
@@ -95,5 +117,14 @@ public class Customer extends Resource {
 
     public Customer update() {
         throw new NotImplementedException();
+    }
+
+    @Root(strict=false)
+    private static class CustomerList {
+        @ElementList(name="customer", inline=true) List<Customer> customers;
+
+        public List<Customer> getCustomers() {
+            return customers;
+        }
     }
 }

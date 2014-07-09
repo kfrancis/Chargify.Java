@@ -58,19 +58,6 @@ public class ConfigurationTest {
     }
 
     @Test
-    public void testConfigurationDefaultsWithEmptyHash() throws Exception {
-        Configuration.setup(configurationValues);
-
-        assertNull("Wrong default value for url",         Configuration.url);
-        assertNull("Wrong default value for subdomain",   Configuration.subdomain);
-        assertNull("Wrong default value for apiKey",      Configuration.apiKey);
-        assertNull("Wrong default value for apiPassword", Configuration.apiPassword);
-        assertNull("Wrong default value for sharedKey",   Configuration.sharedKey);
-        assertFalse("Wrong default value for json", Configuration.json);
-        assertFalse("Wrong default value for cvvRequired",Configuration.cvvRequired);
-    }
-
-    @Test
     public void testConfigurationOverridingValues() throws Exception {
         configurationValues.put("url",         "http://google.com");
         configurationValues.put("subdomain",   "acme");

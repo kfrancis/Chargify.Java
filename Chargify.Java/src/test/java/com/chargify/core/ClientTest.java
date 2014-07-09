@@ -24,6 +24,7 @@
 
 package com.chargify.core;
 
+import com.chargify.core.helpers.Maps;
 import com.github.kevinsawicki.http.HttpRequest;
 import org.easymock.EasyMockSupport;
 import org.easymock.Mock;
@@ -71,7 +72,35 @@ public class ClientTest extends EasyMockSupport {
         expect(request.body()).andReturn("<xml></xml>");
         replayAll();
 
-        assertEquals("wrong body content", "<xml></xml>", client.get("customers"));
+        client.get("customers");
+    }
+
+    @Test
+    public void testGetWithOneParam() throws Exception {
+        expect(requester.get("http://example.com/customers/lookup.xml?reference=fred", "12345", "sekret", "xml"))
+                .andReturn(request);
+
+        expect(request.body()).andReturn("<xml></xml>");
+        replayAll();
+
+        HashMap<String, String> params = new HashMap<String, String>() {
+            {
+                put("reference", "fred");
+            }
+        };
+
+        client.get("customers/lookup", Maps.of("reference", "fred"));
+    }
+
+    @Test
+    public void testGetWithMultipleParams() throws Exception {
+        expect(requester.get("http://example.com/customers/lookup.xml?reference=fred&foo=bar", "12345", "sekret", "xml"))
+                .andReturn(request);
+
+        expect(request.body()).andReturn("<xml></xml>");
+        replayAll();
+
+        client.get("customers/lookup", Maps.of("reference", "fred", "foo", "bar"));
     }
 
     @Test
@@ -82,6 +111,6 @@ public class ClientTest extends EasyMockSupport {
         expect(request.body()).andReturn("<xml><foo>Wee</foo></xml>");
         replayAll();
 
-        assertEquals("wrong body content", "<xml><foo>Wee</foo></xml>", client.post("customers/1"));
+        client.post("customers/1");
     }
 }

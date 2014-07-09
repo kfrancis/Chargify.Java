@@ -26,6 +26,10 @@ package com.chargify.core;
 
 import com.github.kevinsawicki.http.HttpRequest;
 
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author jeremywrowe, kfrancis
@@ -39,6 +43,12 @@ public class Client {
 
     public HttpRequest get(String path) throws Exception {
         String address = getAdddress(path);
+        HttpRequest request = requester.get(address, Configuration.apiKey, Configuration.apiPassword, requestType());
+        return request;
+    }
+
+    public HttpRequest get(String path, HashMap<String, String> params) throws Exception {
+        String address = getAdddress(path) + buildQueryParams(params);
         HttpRequest request = requester.get(address, Configuration.apiKey, Configuration.apiPassword, requestType());
         return request;
     }
@@ -71,5 +81,23 @@ public class Client {
 
     private String requestType() {
         return (Configuration.json == true) ? "json" : "xml";
+    }
+
+    private String buildQueryParams(HashMap<String, String> params) throws Exception {
+        StringBuilder urlParams = new StringBuilder("?");
+        boolean multiple = false;
+        for(Map.Entry<String, String> entry : params.entrySet()) {
+            if(multiple) {
+                urlParams.append("&");
+            } else {
+                multiple = true;
+            }
+
+            urlParams.append(entry.getKey());
+            urlParams.append("=");
+            urlParams.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+        }
+
+        return urlParams.toString();
     }
 }
