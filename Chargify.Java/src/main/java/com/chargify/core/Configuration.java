@@ -40,10 +40,10 @@ public class Configuration {
         Configuration.url         = (String)  config.get("url");
         Configuration.subdomain   = (String)  config.get("subdomain");
         Configuration.apiKey      = (String)  config.get("apiKey");
-        Configuration.apiPassword = (String)  config.get("apiPassword");
-        Configuration.sharedKey   = (String)  config.get("sharedKey");
-        Configuration.json        = (boolean) config.get("json");
-        Configuration.cvvRequired = (boolean) config.get("cvvRequired");
+        Configuration.apiPassword = config.containsKey("apiPassword") ? (String) config.get("apiPassword") : "X";
+        Configuration.sharedKey   = config.containsKey("sharedKey") ? (String) config.get("sharedKey") : "";
+        Configuration.json        = config.containsKey("json") ? (boolean) config.get("json") : false;
+        Configuration.cvvRequired = config.containsKey("cvvRequired") ? (boolean) config.get("cvvRequired") : false;
     }
 
     public static void load() {
