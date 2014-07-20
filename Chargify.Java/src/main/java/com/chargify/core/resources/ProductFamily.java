@@ -24,11 +24,18 @@
 
 package com.chargify.core.resources;
 
+import com.chargify.core.Client;
+import com.chargify.core.ClientFactory;
+import com.github.kevinsawicki.http.HttpRequest;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
@@ -44,16 +51,85 @@ public class ProductFamily extends Resource {
     @Getter @Setter @Element private String handle = null;
     @Getter @Setter @Element private String name = null;
     
+    /**
+     * Retrieve details about a specific product family
+     * @param client        The communication client
+     * @param id            The id of the product family
+     * @return              The details of the product family
+     * @throws Exception
+     */
+    public static ProductFamily find(Client client, int id) throws Exception {
+        HttpRequest request = client.get("product_families/" + id);
+        if(request.ok()) {
+            Serializer deserializer = new Persister();
+            return deserializer.read(ProductFamily.class, request.body());
+        }
+        else {
+            throw new RecordNotFoundException("Product family " + id + " not found");
+        }
+    }
+    
+    /**
+     * Retrieve details about a specific product family
+     * @param id            The id of the product family
+     * @return              The details of the product family
+     * @throws Exception
+     */
     public static ProductFamily find(int id) throws Exception {
-        throw new NotImplementedException();
+        return find(ClientFactory.build(), id);
     }
     
-    public static ProductFamily find(String handle) throws Exception {
-        throw new NotImplementedException();
+    /**
+     * Retrieve details about a specific product family, using the family handle
+     * @param client        The communication client
+     * @param handle        The handle of the product family
+     * @return              The details of the product family
+     * @throws Exception
+     */
+    public static ProductFamily findByHandle(Client client, String handle) throws Exception {
+        HttpRequest request = client.get("product_families/handle/" + handle);
+        if(request.ok()) {
+            Serializer deserializer = new Persister();
+            return deserializer.read(ProductFamily.class, request.body());
+        }
+        else {
+            throw new RecordNotFoundException("Product family " + handle + " not found");
+        }
     }
     
-    public static ArrayList<ProductFamily> all() throws Exception {
-        throw new NotImplementedException();
+    /**
+     * Retrieve details about a specific product family, using the family handle
+     * @param handle        The handle of the product family
+     * @return              The details of the product family
+     * @throws Exception
+     */
+    public static ProductFamily findByHandle(String handle) throws Exception {
+        return findByHandle(ClientFactory.build(), handle);
+    }
+    
+    /**
+     * Retrieve the details of all product families in a site
+     * @param client        The communication client
+     * @return              The list of product families
+     * @throws Exception
+     */
+    public static List<ProductFamily> all(Client client) throws Exception {
+        HttpRequest request = client.get("product_families");
+        Serializer deserializer = new Persister();
+        if (request.ok()){ 
+            return deserializer.read(ProductFamilyList.class, request.body()).getProductFamilies();
+        } else {
+            throw new Exception("Could not parse /product_families.xml. Please verify your credentials.");
+        }
+    }
+    
+    /**
+     * Retrieve the details of all product families in a site
+     * @return              The list of product families
+     * @throws Exception
+     */
+    public static List<ProductFamily> all() throws Exception {
+        return all(ClientFactory.build());
     }
     
     public static ProductFamily create() throws Exception {
@@ -66,5 +142,13 @@ public class ProductFamily extends Resource {
     
     public static ProductFamily delete() throws Exception {
         throw new NotImplementedException();
+    }
+    
+    @Root(strict=false)
+    private static class ProductFamilyList {
+        @ElementList(name="product_family", inline=true) List<ProductFamily> product_families;
+        public List<ProductFamily> getProductFamilies() {
+            return product_families;
+        }
     }
 }
