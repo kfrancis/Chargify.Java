@@ -157,12 +157,12 @@ public class Product extends Resource {
      * @throws Exception
      */
     public static List<Product> allFromFamily(Client client, int familyId) throws Exception {
-        HttpRequest request = client.get("/product_families/" + familyId + "/products");
+        HttpRequest request = client.get("product_families/" + familyId + "/products");
         Serializer deserializer = new Persister();
         if (request.ok()){ 
             return deserializer.read(ProductList.class, request.body()).getProducts();
         } else {
-            throw new Exception("Could not pase /product_families/"+familyId+"/products.xml. Please verify your credentials.");
+            throw new Exception("Could not parse /product_families/"+familyId+"/products.xml. Please verify your credentials.");
         }
     }
     
