@@ -26,11 +26,12 @@ package com.chargify.core.resources;
 
 import com.chargify.core.Client;
 import com.chargify.core.ClientFactory;
+import com.github.kevinsawicki.http.HttpRequest;
+import java.util.ArrayList;
+import java.util.List;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
-import java.util.ArrayList;
 
 /**
  * @see <a href="https://docs.chargify.com/api-subscriptions">https://docs.chargify.com/api-subscriptions</a>
@@ -55,12 +56,57 @@ public class Subscription extends Resource {
     @Element(name="trial_ended_at", required=false) private String trialEndedAt = "";
     @Element(name="trial_started_at", required=false) private String trialStartedAt = "";
     
+    /**
+     * Retrieve details about a single subscription, using the subscription id
+     * @param id            The id of the subscription
+     * @return              The details of the subscription
+     * @throws Exception
+     */
     public static Subscription find(int id) throws Exception {
-        throw new NotImplementedException();
+        return find(ClientFactory.build(), id);
     }
     
-    public static ArrayList<Subscription> all() throws Exception {
-        throw new NotImplementedException();
+    /**
+     * Retrieve details about a single subscription, using the subscription id
+     * @param client        The communication client
+     * @param id            The id of the subscription
+     * @return              The details of the subscription
+     * @throws Exception
+     */
+    public static Subscription find(Client client, int id) throws Exception {
+        HttpRequest request = client.get("subscriptions/" + id);
+        if(request.ok()) {
+            Serializer deserializer = new Persister();
+            return deserializer.read(Subscription.class, request.body());
+        }
+        else {
+            throw new RecordNotFoundException("Subscription " + id + " not found");
+        }
+    }
+    
+    /**
+     * Retrieve all subscriptions
+     * @param client        The communication client
+     * @return              The list of subscriptions
+     * @throws Exception
+     */
+    public static List<Subscription> all(Client client) throws Exception {
+        HttpRequest request = client.get("subscriptions");
+        Serializer deserializer = new Persister();
+        if (request.ok()){ 
+            return deserializer.read(SubscriptionList.class, request.body()).getSubscriptions();
+        } else {
+            throw new Exception("Could not parse /subscriptions.xml. Please verify your credentials.");
+        }
+    }
+    
+    /**
+     * Retrieve all subscriptions
+     * @return              The list of subscriptions
+     * @throws Exception
+     */
+    public static List<Subscription> all() throws Exception {
+        return all(ClientFactory.build());
     }
     
     public static Subscription create() {
@@ -73,5 +119,13 @@ public class Subscription extends Resource {
     
     public static Subscription cancel(int id) {
         throw new NotImplementedException();
+    }
+    
+    @Root(strict=false)
+    private static class SubscriptionList {
+        @ElementList(name="subscription", inline=true) List<Subscription> subscriptions;
+        public List<Subscription> getSubscriptions() {
+            return subscriptions;
+        }
     }
 }
