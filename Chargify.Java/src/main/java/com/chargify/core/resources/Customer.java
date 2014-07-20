@@ -103,7 +103,7 @@ public class Customer extends Resource {
         if(request.ok()) {
             return deserializer.read(CustomerList.class, request.body()).getCustomers();
         } else {
-           throw new Exception("Could not parse /customers.xml. Please verify your credentials");
+           throw new Exception("Could not parse /customers.xml. Please verify your credentials.");
         }
     }
 
