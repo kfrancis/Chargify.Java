@@ -27,9 +27,10 @@ package com.chargify.core.resources;
 import com.chargify.core.Client;
 import com.chargify.core.ClientFactory;
 import com.github.kevinsawicki.http.HttpRequest;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
-import java.util.ArrayList;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
@@ -39,6 +40,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * @see <a href="https://docs.chargify.com/api-products">https://docs.chargify.com/api-products</a>
  */
 @Root(strict=false)
+@Default(DefaultType.FIELD)
 public class Product extends Resource {
     
     @Getter @Setter @Element private int id;
@@ -66,11 +68,23 @@ public class Product extends Resource {
     @Getter @Setter @Element(name="updated_at") private String updatedAt = "";
     @Getter @Setter @Element private ProductFamily productFamily = null;
 
+    /**
+     * Retrieve the product details using the product id
+     * @param id            The id of the product to retrieve
+     * @return              The product details (if found), throws RecordNotFoundException otherwise
+     * @throws Exception
+     */
     public static Product find(int id) throws Exception {
-        Client client = ClientFactory.build();
-        return find(client, id);
+        return find(ClientFactory.build(), id);
     }
     
+    /**
+     * Retrieve the product details using the product id
+     * @param client        The communication client
+     * @param id            The id of the product to retrieve
+     * @return              The product details (if found), throws RecordNotFoundException otherwise
+     * @throws Exception
+     */
     public static Product find(Client client, int id) throws Exception {
         HttpRequest request = client.get("products/" + id);
         if(request.ok()) {
@@ -78,35 +92,99 @@ public class Product extends Resource {
             return deserializer.read(Product.class, request.body());
         }
         else {
-            return new Product();
+            throw new RecordNotFoundException("Product " + id + " not found");
         }
     }
     
-    public static Product find(String handle) throws Exception {
-        Client client = ClientFactory.build();
-        return find(client, handle);
+    /**
+     * Retrieve the product details using the product handle
+     * @param handle        The product's handle
+     * @return              The product details (if found), RecordNotFoundException otherwise
+     * @throws Exception
+     */
+    public static Product findByHandle(String handle) throws Exception {
+        return findByHandle(ClientFactory.build(), handle);
     }
     
-    public static Product find(Client client, String handle) throws Exception {
+    /**
+     *
+     * @param client        Communication client
+     * @param handle        The product's handle
+     * @return              The product details (if found), RecordNotFoundException otherwise
+     * @throws Exception    
+     */
+    public static Product findByHandle(Client client, String handle) throws Exception {
         HttpRequest request = client.get("products/handle/" + handle);
         if(request.ok()) {
             Serializer deserializer = new Persister();
             return deserializer.read(Product.class, request.body());
         }
         else {
-            return new Product();
+            throw new RecordNotFoundException("Product " + handle + " not found.");
         }
     }
     
-    public static ArrayList<Product> all() throws Exception {
-        throw new NotImplementedException();
+    /**
+     * Retrieve details of all products
+     * @param client        The communication client
+     * @return              The list of products
+     * @throws Exception
+     */
+    public static List<Product> all(Client client) throws Exception {
+        HttpRequest request = client.get("products");
+        Serializer deserializer = new Persister();
+        if (request.ok()){ 
+            return deserializer.read(ProductList.class, request.body()).getProducts();
+        } else {
+            throw new Exception("Could not pase /products.xml. Please verify your credentials.");
+        }
     }
     
-    public static ArrayList<Product> all(int parentId) throws Exception {
-        throw new NotImplementedException();
+    /**
+     * Retrieve details of all products
+     * @return              The list of products
+     * @throws Exception
+     */
+    public static List<Product> all() throws Exception {
+        return all(ClientFactory.build());
+    }
+    
+    /**
+     * Retrieve all products from a specific product family
+     * @param client        The communication client
+     * @param familyId      The id of the products parent product family
+     * @return              The list of products
+     * @throws Exception
+     */
+    public static List<Product> allFromFamily(Client client, int familyId) throws Exception {
+        HttpRequest request = client.get("/product_families/" + familyId + "/products");
+        Serializer deserializer = new Persister();
+        if (request.ok()){ 
+            return deserializer.read(ProductList.class, request.body()).getProducts();
+        } else {
+            throw new Exception("Could not pase /product_families/"+familyId+"/products.xml. Please verify your credentials.");
+        }
+    }
+    
+    /**
+     * Retrieve all products from a specific product family
+     * @param familyId      The id of the products parent product family
+     * @return              The list of products
+     * @throws Exception
+     */
+    public static List<Product> allFromFamily(int familyId) throws Exception {
+        return allFromFamily(ClientFactory.build(), familyId);
     }
     
     public static Product create() throws Exception {
         throw new NotImplementedException();
+    }
+    
+    @Root(strict=false)
+    private static class ProductList {
+        @ElementList(name="product", inline=true) List<Product> products;
+        public List<Product> getProducts() {
+            return products;
+        }
     }
 }
