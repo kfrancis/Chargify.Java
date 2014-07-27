@@ -1,7 +1,6 @@
 package com.chargify.core.resources;
 
 import com.chargify.core.Client;
-import com.chargify.core.Configuration;
 import com.chargify.core.helpers.Maps;
 import com.github.kevinsawicki.http.HttpRequest;
 import org.easymock.Mock;

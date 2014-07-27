@@ -34,12 +34,7 @@ import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.lang.reflect.Array;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Root(strict=false)
 @Default(DefaultType.FIELD)
@@ -60,12 +55,12 @@ public class Customer extends Resource {
     @Getter @Setter @Element(required=false) private String country = "";
     @Getter @Setter @Element(required=false) private String phone = "";
 
-    @Transient private boolean verified;
-    @Transient private String portalCustomerCreatedAt = "";
-    @Transient private String portalInviteLastSentAt = "";
-    @Transient private String portalInviteLastAcceptedAt = "";
-    @Transient private String createdAt = "";
-    @Transient private String updatedAt = "";
+    @Getter @Transient private boolean verified;
+    @Getter @Transient @Path("portal_customer_created_at") private Date portalCustomerCreatedAt = new Date();
+    @Getter @Transient @Path("portal_invite_last_sent_at") private Date portalInviteLastSentAt = new Date();
+    @Getter @Transient @Path("portal_invite_last_accepted_at") private Date portalInviteLastAcceptedAt = new Date();
+    @Getter @Element(name="created_at") private Date createdAt = new Date();
+    @Getter @Transient @Path("updated_at") private Date updatedAt = new Date();
 
     public static Customer find(int id) throws Exception {
         return find(ClientFactory.build(), id);
