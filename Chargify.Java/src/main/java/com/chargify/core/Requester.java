@@ -26,7 +26,7 @@ package com.chargify.core;
 
 import com.github.kevinsawicki.http.HttpRequest;
 import java.net.URL;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -60,7 +60,7 @@ public class Requester {
      * @return              The request object
      * @throws Exception
      */
-    public HttpRequest post(String address, String apiKey, String apiPassword, HashMap body, String requestType) throws Exception {
+    public HttpRequest post(String address, String apiKey, String apiPassword, Map body, String requestType) throws Exception {
         HttpRequest request = HttpRequest.post(new URL(address));
         request.basic(apiKey, apiPassword);
         request.accept(String.format("application/%s", requestType));
@@ -78,7 +78,7 @@ public class Requester {
      * @return              The request object
      * @throws Exception
      */
-    public HttpRequest put(String address, String apiKey, String apiPassword, HashMap body, String requestType) throws Exception {
+    public HttpRequest put(String address, String apiKey, String apiPassword, Map body, String requestType) throws Exception {
         HttpRequest request = HttpRequest.put(new URL(address));
         request.basic(apiKey, apiPassword);
         request.accept(String.format("application/%s", requestType));

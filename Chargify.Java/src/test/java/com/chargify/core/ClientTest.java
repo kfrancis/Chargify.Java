@@ -92,7 +92,7 @@ public class ClientTest extends EasyMockSupport {
 
     @Test
     public void testGetWithMultipleParams() throws Exception {
-        expect(requester.get("http://example.com/customers/lookup.xml?reference=fred&foo=bar", "12345", "sekret", "xml"))
+        expect(requester.get("http://example.com/customers/lookup.xml?foo=bar&reference=fred", "12345", "sekret", "xml"))
                 .andReturn(request);
 
         expect(request.body()).andReturn("<xml></xml>");
