@@ -60,8 +60,7 @@ public class Client {
      */
     public HttpRequest get(String path, HashMap<String, String> params) throws Exception {
         String address = getAddress(path) + buildQueryParams(params);
-        HttpRequest request = requester.get(address, Configuration.apiKey, Configuration.apiPassword, requestType());
-        return request;
+        return requester.get(address, Configuration.apiKey, Configuration.apiPassword, requestType());
     }
 
     /**
@@ -73,8 +72,7 @@ public class Client {
      */
     public HttpRequest post(String path, HashMap<String, String> body) throws Exception {
         String address = getAddress(path);
-        HttpRequest request = requester.post(address, Configuration.apiKey, Configuration.apiPassword, body, requestType());
-        return request;
+        return requester.post(address, Configuration.apiKey, Configuration.apiPassword, body, requestType());
     }
 
     /**
@@ -86,8 +84,7 @@ public class Client {
      */
     public HttpRequest put(String path, HashMap<String, String> body) throws Exception {
         String address = getAddress(path);
-        HttpRequest request = requester.put(address, Configuration.apiKey, Configuration.apiPassword, body, requestType());
-        return request;
+        return requester.put(address, Configuration.apiKey, Configuration.apiPassword, body, requestType());
     }
 
     /**
@@ -98,8 +95,7 @@ public class Client {
      */
     public HttpRequest delete(String path) throws Exception {
         String address = getAddress(path);
-        HttpRequest request = requester.delete(address, Configuration.apiKey, Configuration.apiPassword, requestType());
-        return request;
+        return requester.delete(address, Configuration.apiKey, Configuration.apiPassword, requestType());
     }
 
     private String getAddress(String path) {
@@ -111,7 +107,7 @@ public class Client {
     }
 
     private String requestType() {
-        return (Configuration.json == true) ? "json" : "xml";
+        return Configuration.json ? "json" : "xml";
     }
 
     private String buildQueryParams(HashMap<String, String> params) throws Exception {

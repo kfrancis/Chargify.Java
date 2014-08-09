@@ -2,7 +2,6 @@ package com.chargify.core.resources;
 
 import com.chargify.core.Client;
 import com.chargify.core.ClientFactory;
-import com.chargify.core.Configuration;
 import com.chargify.core.helpers.Maps;
 import com.github.kevinsawicki.http.HttpRequest;
 import org.easymock.Mock;
@@ -11,12 +10,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.easymock.EasyMockSupport;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 import static org.easymock.EasyMock.expect;
-import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.*;
 
@@ -122,7 +119,7 @@ public class CustomerTest extends EasyMockSupport {
             Customer.all(client);
             fail("Customer list did not throw an exception and it should have");
         } catch(Exception ex) {
-            assertEquals("Incorrect exception message", "Could not parse /customers.xml. Please verify your credentials", ex.getMessage());
+            assertEquals("Incorrect exception message", "Could not parse /customers.xml. Please verify your credentials.", ex.getMessage());
         }
     }
 

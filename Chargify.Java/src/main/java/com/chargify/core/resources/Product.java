@@ -27,7 +27,7 @@ package com.chargify.core.resources;
 import com.chargify.core.Client;
 import com.chargify.core.ClientFactory;
 import com.github.kevinsawicki.http.HttpRequest;
-import java.util.ArrayList;
+
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;

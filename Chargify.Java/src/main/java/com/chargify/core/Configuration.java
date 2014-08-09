@@ -42,8 +42,8 @@ public class Configuration {
         Configuration.apiKey      = (String)  config.get("apiKey");
         Configuration.apiPassword = config.containsKey("apiPassword") ? (String) config.get("apiPassword") : "X";
         Configuration.sharedKey   = config.containsKey("sharedKey") ? (String) config.get("sharedKey") : "";
-        Configuration.json        = config.containsKey("json") ? (boolean) config.get("json") : false;
-        Configuration.cvvRequired = config.containsKey("cvvRequired") ? (boolean) config.get("cvvRequired") : false;
+        Configuration.json        = config.containsKey("json") || false;
+        Configuration.cvvRequired = config.containsKey("cvvRequired") || false;
     }
 
     public static void load() {
