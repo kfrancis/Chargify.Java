@@ -105,12 +105,13 @@ public class ClientTest extends EasyMockSupport {
 
     @Test
     public void testPost() throws Exception {
-        expect(requester.post("http://example.com/customers/1.xml", "12345", "sekret", "xml"))
+        HashMap body = new HashMap();
+        expect(requester.post("http://example.com/customers/1.xml", "12345", "sekret", body, "xml"))
                 .andReturn(request);
 
         expect(request.body()).andReturn("<xml><foo>Wee</foo></xml>");
         replayAll();
 
-        client.post("customers/1");
+        client.post("customers/1", body);
     }
 }

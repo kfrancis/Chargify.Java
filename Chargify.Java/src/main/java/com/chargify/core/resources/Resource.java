@@ -27,9 +27,22 @@ package com.chargify.core.resources;
 import com.chargify.core.Client;
 import com.chargify.core.ClientFactory;
 
+import java.util.HashMap;
+
 public abstract class Resource {
 
     private final Client client;
+    protected boolean newRecord = true;
+
+    public boolean isPersisted() {
+        return !newRecord;
+    }
+
+    protected void guard(String key, Object value, HashMap<String, String> hash) {
+        if (value != null) {
+            hash.put(key, value.toString());
+        }
+    }
 
     public Resource() {
         this.client = ClientFactory.build();

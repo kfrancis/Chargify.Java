@@ -26,6 +26,7 @@ package com.chargify.core;
 
 import com.github.kevinsawicki.http.HttpRequest;
 import java.net.URL;
+import java.util.HashMap;
 
 /**
  *
@@ -54,14 +55,16 @@ public class Requester {
      * @param address       The address of the API
      * @param apiKey        The username for basic authentication
      * @param apiPassword   The password for basic authentication
+     * @param body          The request body of the API
      * @param requestType   The URI part of the API method
      * @return              The request object
      * @throws Exception
      */
-    public HttpRequest post(String address, String apiKey, String apiPassword, String requestType) throws Exception {
+    public HttpRequest post(String address, String apiKey, String apiPassword, HashMap body, String requestType) throws Exception {
         HttpRequest request = HttpRequest.post(new URL(address));
         request.basic(apiKey, apiPassword);
         request.accept(String.format("application/%s", requestType));
+        request.form(body);
         return request;
     }
     
@@ -70,14 +73,16 @@ public class Requester {
      * @param address       The address of the API
      * @param apiKey        The username for basic authentication
      * @param apiPassword   The password for basic authentication
+     * @param body          The request body of the API
      * @param requestType   The URI part of the API method
      * @return              The request object
      * @throws Exception
      */
-    public HttpRequest put(String address, String apiKey, String apiPassword, String requestType) throws Exception {
+    public HttpRequest put(String address, String apiKey, String apiPassword, HashMap body, String requestType) throws Exception {
         HttpRequest request = HttpRequest.put(new URL(address));
         request.basic(apiKey, apiPassword);
         request.accept(String.format("application/%s", requestType));
+        request.form(body);
         return request;
     }
     

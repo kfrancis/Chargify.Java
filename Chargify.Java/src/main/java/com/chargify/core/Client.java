@@ -41,37 +41,68 @@ public class Client {
     public Client()                    { this.requester = new Requester(); }
     public Client(Requester requester) { this.requester = requester; }
 
+    /**
+     * (http) GET
+     * @param  path    The path to the resource without leading slash
+     * @return         The request object
+     * @throws Exception
+     */
     public HttpRequest get(String path) throws Exception {
-        String address = getAdddress(path);
-        HttpRequest request = requester.get(address, Configuration.apiKey, Configuration.apiPassword, requestType());
-        return request;
+        return get(path, new HashMap<String, String>());
     }
 
+    /**
+     * (http) GET
+     * @param  path    The path to the resource without leading slash
+     * @param  params  The query params for the request
+     * @return         The request object
+     * @throws Exception
+     */
     public HttpRequest get(String path, HashMap<String, String> params) throws Exception {
-        String address = getAdddress(path) + buildQueryParams(params);
+        String address = getAddress(path) + buildQueryParams(params);
         HttpRequest request = requester.get(address, Configuration.apiKey, Configuration.apiPassword, requestType());
         return request;
     }
 
-    public HttpRequest post(String path) throws Exception {
-        String address = getAdddress(path);
-        HttpRequest request = requester.post(address, Configuration.apiKey, Configuration.apiPassword, requestType());
+    /**
+     * (http) POST
+     * @param  path   The path to the resource without leading slash
+     * @param  body   The xml representation of the object that is being created
+     * @return        The request object
+     * @throws Exception
+     */
+    public HttpRequest post(String path, HashMap<String, String> body) throws Exception {
+        String address = getAddress(path);
+        HttpRequest request = requester.post(address, Configuration.apiKey, Configuration.apiPassword, body, requestType());
         return request;
     }
-    
-    public HttpRequest put(String path) throws Exception {
-        String address = getAdddress(path);
-        HttpRequest request = requester.put(address, Configuration.apiKey, Configuration.apiPassword, requestType());
+
+    /**
+     * (http) PUT
+     * @param  path   The path to the resource without leading slash
+     * @param  body   The xml representation of the object that is being updated
+     * @return        The request object
+     * @throws Exception
+     */
+    public HttpRequest put(String path, HashMap<String, String> body) throws Exception {
+        String address = getAddress(path);
+        HttpRequest request = requester.put(address, Configuration.apiKey, Configuration.apiPassword, body, requestType());
         return request;
     }
-    
+
+    /**
+     * (http) PUT
+     * @param  path   The path to the resource without leading slash
+     * @return        The request object
+     * @throws Exception
+     */
     public HttpRequest delete(String path) throws Exception {
-        String address = getAdddress(path);
+        String address = getAddress(path);
         HttpRequest request = requester.delete(address, Configuration.apiKey, Configuration.apiPassword, requestType());
         return request;
     }
 
-    private String getAdddress(String path) {
+    private String getAddress(String path) {
         return String.format("%s%s.%s", getBaseUrl(), path, requestType());
     }
 
@@ -84,6 +115,10 @@ public class Client {
     }
 
     private String buildQueryParams(HashMap<String, String> params) throws Exception {
+        if(params.isEmpty()) {
+            return "";
+        }
+
         StringBuilder urlParams = new StringBuilder("?");
         boolean multiple = false;
         for(Map.Entry<String, String> entry : params.entrySet()) {

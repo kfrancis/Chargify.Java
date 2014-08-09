@@ -1,6 +1,8 @@
 package com.chargify.core.resources;
 
 import com.chargify.core.Client;
+import com.chargify.core.ClientFactory;
+import com.chargify.core.Configuration;
 import com.chargify.core.helpers.Maps;
 import com.github.kevinsawicki.http.HttpRequest;
 import org.easymock.Mock;
@@ -9,7 +11,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.easymock.EasyMockSupport;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import static org.easymock.EasyMock.expect;
 import static org.junit.Assert.assertEquals;
@@ -120,6 +124,28 @@ public class CustomerTest extends EasyMockSupport {
         } catch(Exception ex) {
             assertEquals("Incorrect exception message", "Could not parse /customers.xml. Please verify your credentials", ex.getMessage());
         }
+    }
+
+    @Test
+    public void testSave() throws Exception {
+        // Configuration.url         = "http://acme.chargify.dev/";
+        // Configuration.apiKey      = "7feIiz7lk6TyM4JpsXyG";
+        // Configuration.apiPassword = "x";
+        // Configuration.json        = false;
+
+        Customer customer = new Customer();
+        customer.setEmail("bob@example.com");
+        customer.setFirstName("Bob");
+        customer.setLastName("Smith");
+        customer.setAddress("123 yarn street");
+        customer.setCity("china town");
+        customer.setReference("cat" + new Random().nextInt());
+        replayAll();
+        // CREATE
+        Customer c = customer.save(ClientFactory.build());
+        // UPDATE
+        c.setFirstName("jane");
+        c.save(ClientFactory.build());
     }
 
     private String getHeader() {
