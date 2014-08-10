@@ -1,8 +1,9 @@
 package com.chargify.core.resources;
 
 import com.chargify.core.Client;
-import com.chargify.core.ClientFactory;
+import com.chargify.core.Response;
 import com.chargify.core.helpers.Maps;
+import com.chargify.core.helpers.Persisted;
 import com.github.kevinsawicki.http.HttpRequest;
 import org.easymock.Mock;
 import org.junit.After;
@@ -11,8 +12,6 @@ import org.junit.Test;
 import org.easymock.EasyMockSupport;
 
 import java.util.List;
-import java.util.Random;
-
 import static org.easymock.EasyMock.expect;
 
 import static org.junit.Assert.*;
@@ -34,59 +33,34 @@ public class CustomerTest extends EasyMockSupport {
     }
 
     @Test
-    public void testFindWithAnOkResponse() throws Exception {
+    public void testFind() throws Exception {
         expect(client.get("customers/70")).andReturn(request);
-        expect(request.ok()).andReturn(true);
+        expect(request.code()).andReturn(200);
         expect(request.body()).andReturn(customerResponse(true));
         replayAll();
 
-        Customer customer = Customer.find(client, 70);
+        Response<Customer> response = Customer._find(client, 70);
+        Customer customer = response.getResource();
 
         assertEquals("Wrong Customer first name", "Jeremy", customer.getFirstName());
         assertEquals("Wrong Customer last name", "Rowe", customer.getLastName());
     }
 
     @Test
-    public void testFindRecordNotFound() throws Exception {
-        expect(client.get("customers/10")).andReturn(request);
-        expect(request.ok()).andReturn(false);
-        replayAll();
-
-        try {
-            Customer.find(client, 10);
-            fail("Should have raised RecordNotFoundException");
-        } catch (RecordNotFoundException ex) {
-            assertEquals("Wrong message", "Customer 10 not found", ex.getMessage());
-        }
-    }
-
-    @Test
-    public void testFindByReferenceWithAnOkResponse() throws Exception {
+    public void testFindByReference() throws Exception {
         expect(client.get("customers/lookup", Maps.of("reference", "jdub"))).andReturn(request);
-        expect(request.ok()).andReturn(true);
+        expect(request.code()).andReturn(200);
         expect(request.body()).andReturn(customerResponse(true));
         replayAll();
 
-        Customer customer = Customer.findByReference(client, "jdub");
+        Response<Customer> response = Customer._findByReference(client, "jdub");
+        Customer customer = response.getResource();
 
         assertEquals("Wrong Customer first name", "Jeremy", customer.getFirstName());
         assertEquals("Wrong Customer last name", "Rowe", customer.getLastName());
         assertEquals("Wrong Customer reference", "jdub", customer.getReference());
     }
 
-    @Test
-    public void testFindByReferenceRecordNotFound() throws Exception {
-        expect(client.get("customers/lookup", Maps.of("reference", "jdub"))).andReturn(request);
-        expect(request.ok()).andReturn(false);
-        replayAll();
-
-        try {
-            Customer.findByReference(client, "jdub");
-            fail("Should have raised RecordNotFoundException");
-        } catch (RecordNotFoundException ex) {
-            assertEquals("Wrong message", "Customer jdub not found", ex.getMessage());
-        }
-    }
 
     @Test
     public void testAll() throws Exception {
@@ -100,7 +74,7 @@ public class CustomerTest extends EasyMockSupport {
         expect(request.body()).andReturn(body);
         replayAll();
 
-        List<Customer> customers = Customer.all(client);
+        List<Customer> customers = Customer._all(client);
         Customer customer        = customers.get(0);
 
         assertEquals("Did not have the correctly sized customer list", 1, customers.size());
@@ -116,7 +90,7 @@ public class CustomerTest extends EasyMockSupport {
 
         try {
             replayAll();
-            Customer.all(client);
+            Customer._all(client);
             fail("Customer list did not throw an exception and it should have");
         } catch(Exception ex) {
             assertEquals("Incorrect exception message", "Could not parse /customers.xml. Please verify your credentials.", ex.getMessage());
@@ -124,25 +98,28 @@ public class CustomerTest extends EasyMockSupport {
     }
 
     @Test
-    public void testSave() throws Exception {
-        // Configuration.url         = "http://acme.chargify.dev/";
-        // Configuration.apiKey      = "7feIiz7lk6TyM4JpsXyG";
-        // Configuration.apiPassword = "x";
-        // Configuration.json        = false;
-
+    public void testSavingANewCustomer() throws Exception {
         Customer customer = new Customer();
-        customer.setEmail("bob@example.com");
-        customer.setFirstName("Bob");
-        customer.setLastName("Smith");
-        customer.setAddress("123 yarn street");
-        customer.setCity("china town");
-        customer.setReference("cat" + new Random().nextInt());
+
+        expect(client.post("customers", customer.asHash())).andReturn(request);
+        expect(request.code()).andReturn(200);
+        expect(request.body()).andReturn(customerResponse(true));
         replayAll();
-        // CREATE
-        Customer c = customer.save(ClientFactory.build());
-        // UPDATE
-        c.setFirstName("jane");
-        c.save(ClientFactory.build());
+
+        customer._save(client);
+    }
+
+    @Test
+    public void testUpdatingAnExistingCustomer() throws Exception {
+        Customer customer = Persisted.mark(new Customer());
+        customer.setId(55);
+
+        expect(client.put("customers/55", customer.asHash())).andReturn(request);
+        expect(request.code()).andReturn(200);
+        expect(request.body()).andReturn(customerResponse(true));
+        replayAll();
+
+        customer._save(client);
     }
 
     private String getHeader() {

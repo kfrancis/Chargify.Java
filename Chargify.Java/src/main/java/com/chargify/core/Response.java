@@ -1,10 +1,33 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2014 kfrancis, jeremywrowe.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package com.chargify.core;
 
+import com.chargify.core.helpers.Persisted;
 import com.chargify.core.resources.Resource;
 import com.chargify.core.transformers.DateFormatTransformer;
 import org.simpleframework.xml.core.Persister;
-
-import java.lang.reflect.Field;
 
 public class Response<T extends Resource> {
 
@@ -30,10 +53,19 @@ public class Response<T extends Resource> {
     }
 
     public <T extends Resource> T getResource() {
-        return _getResource();
+        if(this.isSuccess()) {
+            try {
+                return Persisted.mark((T) serializer.read(this.resourceType, this.rawResponse));
+            } catch (Exception ex) {
+                this.status = 500;
+                this.responseErrors = new ResponseErrors(ex.getLocalizedMessage());
+            }
+        }
+        return null;
+
     }
 
-    public ResponseErrors getErrors() {
+    public ResponseErrors errors() {
         if(this.responseErrors != null) {
             return this.responseErrors;
         }
@@ -46,33 +78,16 @@ public class Response<T extends Resource> {
         }
     }
 
-    private <T extends Resource> T _getResource() {
-        if(this.isSuccess()) {
+    private ResponseErrors _getErrors() {
+        if(this.isError()) {
             try {
-                return (T)_markResourceAsPersisted((T)serializer.read(this.resourceType, this.rawResponse));
+                return serializer.read(ResponseErrors.class, this.rawResponse);
             } catch (Exception ex) {
                 this.status = 500;
-                this.responseErrors = new ResponseErrors(ex.getLocalizedMessage());
+                return new ResponseErrors(ex.getLocalizedMessage());
             }
-        }
-        return null;
-
-    }
-
-    private ResponseErrors _getErrors() {
-        try {
-            return serializer.read(ResponseErrors.class, this.rawResponse);
-        } catch (Exception ex) {
-            this.status = 500;
-            return new ResponseErrors(ex.getLocalizedMessage());
+        } else {
+            return new ResponseErrors();
         }
     }
-
-    private <T extends Resource> T _markResourceAsPersisted(T resource) throws Exception {
-        Field f = Resource.class.getDeclaredField("newRecord");
-        f.setAccessible(true);
-        f.set(resource, false);
-        return (T) resource;
-    }
-
 }

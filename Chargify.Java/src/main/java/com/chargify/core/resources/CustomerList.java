@@ -22,59 +22,22 @@
  * THE SOFTWARE.
  */
 
-package com.chargify.core;
+package com.chargify.core.resources;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Root(strict=false)
-public class ResponseErrors implements Iterable<String>, Iterator<String> {
-    @ElementList(inline=true, required=true, entry="error", type=String.class) List<String> errors;
+class CustomerList {
+    @ElementList(name="customer", inline=true)
+    List<Customer> customers;
 
-    private int errorIndex = 0;
-
-    public ResponseErrors() {
-        errors = new ArrayList<String>();
-    }
-
-    public ResponseErrors(String message) {
-        errors = new ArrayList<String>();
-        errors.add(message);
-    }
-
-    public boolean any() {
-        return errors.size() > 0;
-    }
-
-    public String first() {
-        return errors.get(0);
-    }
-
-    public List<String> all() {
-        return errors;
-    }
-
-    @Override
-    public Iterator<String> iterator() {
-        return this;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return errorIndex < errors.size();
-    }
-
-    @Override
-    public String next() {
-        if (errorIndex == errors.size())
-            throw new NoSuchElementException();
-
-        errorIndex++;
-        return errors.get(errorIndex - 1);
+    public List<Customer> getCustomers() {
+        for(Customer customer : customers) {
+            customer.newRecord = false;
+        }
+        return customers;
     }
 }
