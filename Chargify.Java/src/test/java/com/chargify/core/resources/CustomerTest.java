@@ -1,10 +1,11 @@
 package com.chargify.core.resources;
 
-import com.chargify.core.Client;
-import com.chargify.core.ListResponse;
-import com.chargify.core.Response;
+import com.chargify.core.http.Client;
+import com.chargify.core.http.ListResponse;
+import com.chargify.core.http.Response;
 import com.chargify.core.helpers.Maps;
 import com.chargify.core.helpers.Persisted;
+import com.chargify.core.resources.collections.CustomerList;
 import com.github.kevinsawicki.http.HttpRequest;
 import org.easymock.Mock;
 import org.junit.After;
@@ -12,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.easymock.EasyMockSupport;
 
-import java.util.List;
 import static org.easymock.EasyMock.expect;
 
 import static org.junit.Assert.*;

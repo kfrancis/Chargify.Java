@@ -22,8 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.chargify.core.resources;
+package com.chargify.core.resources.collections;
 
+import com.chargify.core.resources.Customer;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
@@ -31,15 +32,7 @@ import java.util.List;
 
 @Root(strict=false)
 public class CustomerList implements ListResource<Customer> {
-    @ElementList(name="customer", inline=true)
-    List<Customer> customers;
-
-    public List<Customer> getCustomers() {
-        for(Customer customer : customers) {
-            customer.newRecord = false;
-        }
-        return customers;
-    }
+    @ElementList(name="customer", inline=true) List<Customer> customers;
 
     @Override
     public List<Customer> all() {

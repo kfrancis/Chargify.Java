@@ -1,4 +1,4 @@
-package com.chargify.core;
+package com.chargify.core.http;
 
 import com.chargify.core.resources.Customer;
 import org.junit.Test;
@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class ResponseTest {

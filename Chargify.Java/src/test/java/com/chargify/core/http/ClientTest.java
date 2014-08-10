@@ -22,8 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.chargify.core;
+package com.chargify.core.http;
 
+import com.chargify.core.Configuration;
 import com.chargify.core.helpers.Maps;
 import com.github.kevinsawicki.http.HttpRequest;
 import org.easymock.EasyMockSupport;

@@ -1,8 +1,8 @@
-package com.chargify.core;
+package com.chargify.core.http;
 
 import com.chargify.core.helpers.Persisted;
 import com.chargify.core.resources.Customer;
-import com.chargify.core.resources.CustomerList;
+import com.chargify.core.resources.collections.CustomerList;
 import org.junit.Test;
 
 import java.util.ArrayList;

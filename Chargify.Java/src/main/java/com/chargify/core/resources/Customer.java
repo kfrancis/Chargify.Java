@@ -24,17 +24,16 @@
 
 package com.chargify.core.resources;
 
-import com.chargify.core.Client;
-import com.chargify.core.ClientFactory;
-import com.chargify.core.ListResponse;
-import com.chargify.core.Response;
+import com.chargify.core.http.Client;
+import com.chargify.core.http.ClientFactory;
+import com.chargify.core.http.ListResponse;
+import com.chargify.core.http.Response;
 import com.chargify.core.helpers.Maps;
-import com.chargify.core.transformers.DateFormatTransformer;
+import com.chargify.core.resources.collections.CustomerList;
 import com.github.kevinsawicki.http.HttpRequest;
 import lombok.Getter;
 import lombok.Setter;
 import org.simpleframework.xml.*;
-import org.simpleframework.xml.core.Persister;
 
 import java.util.*;
 

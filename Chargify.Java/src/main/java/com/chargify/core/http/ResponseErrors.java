@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.chargify.core;
+package com.chargify.core.http;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
@@ -39,11 +39,11 @@ public class ResponseErrors implements Iterable<String>, Iterator<String> {
     private int currentIndex = 0;
 
     public ResponseErrors() {
-        errors = new ArrayList<String>();
+        errors = new ArrayList<>();
     }
 
     public ResponseErrors(String message) {
-        errors = new ArrayList<String>();
+        errors = new ArrayList<>();
         errors.add(message);
     }
 
@@ -60,7 +60,7 @@ public class ResponseErrors implements Iterable<String>, Iterator<String> {
     }
 
     public String first() {
-        return errors.get(0);
+        return any() ? errors.get(0) : null;
     }
 
     public List<String> all() {
@@ -88,5 +88,9 @@ public class ResponseErrors implements Iterable<String>, Iterator<String> {
 
         currentIndex++;
         return errors.get(currentIndex - 1);
+    }
+
+    public void add(String error) {
+        errors.add(error);
     }
 }

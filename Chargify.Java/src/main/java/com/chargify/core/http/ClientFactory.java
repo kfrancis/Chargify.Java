@@ -22,16 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.chargify.core;
+package com.chargify.core.http;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
-
-public class ClientFactoryTest {
-
-    @Test
-    public void testCreatesAnInstanceOfChargifyClient() throws Exception {
-        assertEquals("did not return a Client", Client.class, ClientFactory.build().getClass());
+public class ClientFactory {
+    public static Client build() {
+        return new Client();
     }
 }

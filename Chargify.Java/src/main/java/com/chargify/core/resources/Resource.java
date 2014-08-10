@@ -24,8 +24,8 @@
 
 package com.chargify.core.resources;
 
-import com.chargify.core.Client;
-import com.chargify.core.ClientFactory;
+import com.chargify.core.http.Client;
+import com.chargify.core.http.ClientFactory;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.HashMap;

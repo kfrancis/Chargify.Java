@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.chargify.core;
+package com.chargify.core.http;
 
 import com.chargify.core.helpers.Persisted;
-import com.chargify.core.resources.ListResource;
+import com.chargify.core.resources.collections.ListResource;
 import com.chargify.core.resources.Resource;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 

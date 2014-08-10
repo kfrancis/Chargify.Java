@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.chargify.core;
+package com.chargify.core.http;
 
 import com.github.kevinsawicki.http.HttpRequest;
 import java.net.URL;

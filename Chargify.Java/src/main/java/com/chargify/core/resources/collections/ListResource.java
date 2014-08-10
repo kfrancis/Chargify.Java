@@ -1,4 +1,6 @@
-package com.chargify.core.resources;
+package com.chargify.core.resources.collections;
+
+import com.chargify.core.resources.Resource;
 
 import java.util.List;
 

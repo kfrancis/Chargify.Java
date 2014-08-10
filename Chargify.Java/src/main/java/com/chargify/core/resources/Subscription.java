@@ -24,8 +24,8 @@
 
 package com.chargify.core.resources;
 
-import com.chargify.core.Client;
-import com.chargify.core.ClientFactory;
+import com.chargify.core.http.Client;
+import com.chargify.core.http.ClientFactory;
 import com.github.kevinsawicki.http.HttpRequest;
 
 import java.util.List;
