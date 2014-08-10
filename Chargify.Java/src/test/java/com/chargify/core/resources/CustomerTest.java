@@ -85,20 +85,6 @@ public class CustomerTest extends EasyMockSupport {
     }
 
     @Test
-    public void testAllWithParsingException() throws Exception {
-        expect(client.get("customers")).andReturn(request);
-        expect(request.ok()).andReturn(false);
-
-        try {
-            replayAll();
-            Customer._all(client);
-            fail("Customer list did not throw an exception and it should have");
-        } catch(Exception ex) {
-            assertEquals("Incorrect exception message", "Could not parse /customers.xml. Please verify your credentials.", ex.getMessage());
-        }
-    }
-
-    @Test
     public void testSavingANewCustomer() throws Exception {
         Customer customer = new Customer();
 
