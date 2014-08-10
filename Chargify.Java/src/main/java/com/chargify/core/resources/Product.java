@@ -43,7 +43,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 @Default(DefaultType.FIELD)
 public class Product extends Resource {
     
-    @Getter @Setter @Element private int id;
+    @Getter @Setter @Element private Integer id;
     @Getter @Setter @Element(name="accounting_code") private String accountingCode = "";
     @Getter @Setter @Element(name="archived_at") private String archivedAt = "";
     @Getter @Setter @Element(name="created_at") private String createdAt = "";
@@ -175,7 +175,11 @@ public class Product extends Resource {
     public static List<Product> allFromFamily(int familyId) throws Exception {
         return allFromFamily(ClientFactory.build(), familyId);
     }
-    
+
+    @Override public boolean canEqual(Object other) {
+        return (other instanceof Product);
+    }
+
     public static Product create() throws Exception {
         throw new NotImplementedException();
     }

@@ -31,11 +31,11 @@ import org.simpleframework.xml.core.Persister;
 
 public class Response<T extends Resource> {
 
-    private int status;
-    private final String rawResponse;
-    private final Persister serializer;
-    private final Class resourceType;
-    private ResponseErrors responseErrors;
+    protected int status;
+    protected final String rawResponse;
+    protected final Persister serializer;
+    protected final Class resourceType;
+    protected ResponseErrors responseErrors;
 
     public Response(int status, String rawResponse, Class<T> resourceType) {
         this.status       = status;
@@ -78,7 +78,7 @@ public class Response<T extends Resource> {
         }
     }
 
-    private ResponseErrors _getErrors() {
+    protected ResponseErrors _getErrors() {
         if(this.isError()) {
             try {
                 return serializer.read(ResponseErrors.class, this.rawResponse);
@@ -89,5 +89,9 @@ public class Response<T extends Resource> {
         } else {
             return new ResponseErrors();
         }
+    }
+
+    public int getStatus() {
+        return status;
     }
 }

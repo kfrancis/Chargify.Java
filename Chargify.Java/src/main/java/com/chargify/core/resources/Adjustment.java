@@ -52,4 +52,8 @@ public class Adjustment extends Resource {
     public static Adjustment create() throws Exception {
         throw new NotImplementedException();
     }
+
+    @Override public boolean canEqual(Object other) {
+        return (other instanceof Adjustment);
+    }
 }

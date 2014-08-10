@@ -1,6 +1,7 @@
 package com.chargify.core.resources;
 
 import com.chargify.core.Client;
+import com.chargify.core.ListResponse;
 import com.chargify.core.Response;
 import com.chargify.core.helpers.Maps;
 import com.chargify.core.helpers.Persisted;
@@ -70,12 +71,12 @@ public class CustomerTest extends EasyMockSupport {
           "</customers>";
 
         expect(client.get("customers")).andReturn(request);
-        expect(request.ok()).andReturn(true);
+        expect(request.code()).andReturn(200);
         expect(request.body()).andReturn(body);
         replayAll();
 
-        List<Customer> customers = Customer._all(client);
-        Customer customer        = customers.get(0);
+        ListResponse<Customer, CustomerList> customers = Customer._all(client);
+        Customer customer = customers.all().get(0);
 
         assertEquals("Did not have the correctly sized customer list", 1, customers.size());
         assertEquals("Wrong Customer first name", "Jeremy", customer.getFirstName());

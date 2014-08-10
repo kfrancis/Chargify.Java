@@ -120,7 +120,11 @@ public class Subscription extends Resource {
     public static Subscription cancel(int id) {
         throw new NotImplementedException();
     }
-    
+
+    @Override public boolean canEqual(Object other) {
+        return (other instanceof Subscription);
+    }
+
     @Root(strict=false)
     private static class SubscriptionList {
         @ElementList(name="subscription", inline=true) List<Subscription> subscriptions;

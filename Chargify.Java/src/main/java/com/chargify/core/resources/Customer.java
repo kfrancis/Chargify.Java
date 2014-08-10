@@ -26,6 +26,7 @@ package com.chargify.core.resources;
 
 import com.chargify.core.Client;
 import com.chargify.core.ClientFactory;
+import com.chargify.core.ListResponse;
 import com.chargify.core.Response;
 import com.chargify.core.helpers.Maps;
 import com.chargify.core.transformers.DateFormatTransformer;
@@ -75,8 +76,10 @@ public class Customer extends Resource {
      * represents the customer record as a hash
      * @return a hash of all of the customer attributes
      */
+    @Override
     public HashMap<String,String> asHash() {
         HashMap<String, String> hash = new HashMap<>();
+        guard("customer[id]",           this.getId(),           hash);
         guard("customer[first_name]",   this.getFirstName(),    hash);
         guard("customer[last_name]",    this.getLastName(),     hash);
         guard("customer[email]",        this.getEmail(),        hash);
@@ -118,7 +121,7 @@ public class Customer extends Resource {
      * @return a list of customers
      * @throws Exception
      */
-    public static List<Customer> all() throws Exception {
+    public static ListResponse<Customer, CustomerList> all() throws Exception {
         return _all(ClientFactory.build());
     }
 
@@ -142,14 +145,12 @@ public class Customer extends Resource {
         return new Response<Customer>(request.code(), request.body(), Customer.class);
     }
 
-    public static List<Customer> _all(Client client) throws Exception {
+    public static ListResponse<Customer, CustomerList> _all(Client client) throws Exception {
         HttpRequest request = client.get("customers");
-        Serializer deserializer = new Persister(DateFormatTransformer.matcher());
+        return new ListResponse<Customer, CustomerList>(request.code(), request.body(), Customer.class, CustomerList.class);
+    }
 
-        if(request.ok()) {
-            return deserializer.read(CustomerList.class, request.body()).getCustomers();
-        } else {
-            throw new Exception("Could not parse /customers.xml. Please verify your credentials.");
-        }
+    @Override public boolean canEqual(Object other) {
+        return (other instanceof Customer);
     }
 }

@@ -30,7 +30,7 @@ import org.simpleframework.xml.Root;
 import java.util.List;
 
 @Root(strict=false)
-class CustomerList {
+public class CustomerList implements ListResource<Customer> {
     @ElementList(name="customer", inline=true)
     List<Customer> customers;
 
@@ -38,6 +38,11 @@ class CustomerList {
         for(Customer customer : customers) {
             customer.newRecord = false;
         }
+        return customers;
+    }
+
+    @Override
+    public List<Customer> all() {
         return customers;
     }
 }

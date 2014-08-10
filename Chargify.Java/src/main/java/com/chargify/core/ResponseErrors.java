@@ -36,7 +36,7 @@ import java.util.NoSuchElementException;
 public class ResponseErrors implements Iterable<String>, Iterator<String> {
     @ElementList(inline=true, required=true, entry="error", type=String.class) List<String> errors;
 
-    private int errorIndex = 0;
+    private int currentIndex = 0;
 
     public ResponseErrors() {
         errors = new ArrayList<String>();
@@ -51,12 +51,24 @@ public class ResponseErrors implements Iterable<String>, Iterator<String> {
         return errors.size() > 0;
     }
 
+    public int count() {
+        return errors.size();
+    }
+
+    public int size() {
+        return errors.size();
+    }
+
     public String first() {
         return errors.get(0);
     }
 
     public List<String> all() {
         return errors;
+    }
+
+    public void resetIterator() {
+        currentIndex = 0;
     }
 
     @Override
@@ -66,15 +78,15 @@ public class ResponseErrors implements Iterable<String>, Iterator<String> {
 
     @Override
     public boolean hasNext() {
-        return errorIndex < errors.size();
+        return currentIndex < errors.size();
     }
 
     @Override
     public String next() {
-        if (errorIndex == errors.size())
+        if (currentIndex == errors.size())
             throw new NoSuchElementException();
 
-        errorIndex++;
-        return errors.get(errorIndex - 1);
+        currentIndex++;
+        return errors.get(currentIndex - 1);
     }
 }

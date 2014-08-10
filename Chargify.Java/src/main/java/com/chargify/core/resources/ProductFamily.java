@@ -143,7 +143,11 @@ public class ProductFamily extends Resource {
     public static ProductFamily delete() throws Exception {
         throw new NotImplementedException();
     }
-    
+
+    @Override public boolean canEqual(Object other) {
+        return (other instanceof ProductFamily);
+    }
+
     @Root(strict=false)
     private static class ProductFamilyList {
         @ElementList(name="product_family", inline=true) List<ProductFamily> product_families;

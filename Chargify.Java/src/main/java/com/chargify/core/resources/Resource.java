@@ -26,6 +26,7 @@ package com.chargify.core.resources;
 
 import com.chargify.core.Client;
 import com.chargify.core.ClientFactory;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.HashMap;
 
@@ -33,6 +34,10 @@ public abstract class Resource {
 
     private final Client client;
     protected boolean newRecord = true;
+
+    public Integer getId() {
+        return null;
+    }
 
     public boolean isPersisted() {
         return !newRecord;
@@ -50,5 +55,32 @@ public abstract class Resource {
 
     public Resource(Client client) {
         this.client = client;
+    }
+
+    public HashMap<String, String> asHash() {
+        throw new NotImplementedException();
+    }
+
+    public boolean canEqual(Object other) {
+        throw new NotImplementedException();
+    }
+
+    @Override public boolean equals(Object other) {
+        if (canEqual(other)) {
+            Resource that = (Resource) other;
+            return this.hashCode() == that.hashCode();
+        }
+
+        return false;
+    }
+
+    @Override public int hashCode() {
+        int offset = 0;
+        if(this.isPersisted()) {
+            offset = this.getId() == null ? 0 : this.getId();
+            offset += 1000;
+        }
+
+        return asHash().hashCode() + offset;
     }
 }
