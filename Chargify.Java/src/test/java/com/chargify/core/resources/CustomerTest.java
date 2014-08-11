@@ -62,7 +62,6 @@ public class CustomerTest extends EasyMockSupport {
         assertEquals("Wrong Customer reference", "jdub", customer.getReference());
     }
 
-
     @Test
     public void testAll() throws Exception {
         String body = getHeader() +

@@ -62,6 +62,7 @@ public abstract class Resource {
     }
 
     public boolean canEqual(Object other) {
+        // Must be implemented in actual resource class
         throw new NotImplementedException();
     }
 

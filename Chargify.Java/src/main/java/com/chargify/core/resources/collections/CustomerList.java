@@ -32,7 +32,7 @@ import java.util.List;
 
 @Root(strict=false)
 public class CustomerList implements ListResource<Customer> {
-    @ElementList(name="customer", inline=true) List<Customer> customers;
+    @ElementList(entry="customer", inline=true, type=com.chargify.core.resources.Customer.class) List<Customer> customers;
 
     @Override
     public List<Customer> all() {
