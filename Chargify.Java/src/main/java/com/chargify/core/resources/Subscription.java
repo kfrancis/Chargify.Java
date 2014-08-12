@@ -30,12 +30,10 @@ import com.chargify.core.http.ListResponse;
 import com.chargify.core.http.Response;
 import com.chargify.core.resources.collections.SubscriptionList;
 import com.github.kevinsawicki.http.HttpRequest;
-
-import java.util.Date;
-import java.util.List;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.util.*;
 
 /**
  * @see <a href="https://docs.chargify.com/api-subscriptions">https://docs.chargify.com/api-subscriptions</a>

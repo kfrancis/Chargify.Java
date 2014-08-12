@@ -34,7 +34,6 @@ import com.github.kevinsawicki.http.HttpRequest;
 import lombok.Getter;
 import lombok.Setter;
 import org.simpleframework.xml.*;
-
 import java.util.*;
 
 @Root(strict=false)

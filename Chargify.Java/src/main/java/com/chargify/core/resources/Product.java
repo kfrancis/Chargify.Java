@@ -30,14 +30,12 @@ import com.chargify.core.http.ListResponse;
 import com.chargify.core.http.Response;
 import com.chargify.core.resources.collections.ProductList;
 import com.github.kevinsawicki.http.HttpRequest;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.util.*;
 
 /**
  * A product is something that can be subscribed to.

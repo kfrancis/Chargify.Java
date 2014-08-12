@@ -26,7 +26,6 @@ package com.chargify.core.http;
 
 import com.chargify.core.Configuration;
 import com.github.kevinsawicki.http.HttpRequest;
-
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;

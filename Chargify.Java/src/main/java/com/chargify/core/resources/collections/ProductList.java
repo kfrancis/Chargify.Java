@@ -25,9 +25,9 @@
 package com.chargify.core.resources.collections;
 
 import com.chargify.core.resources.Product;
-import java.util.List;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+import java.util.List;
 
 /**
  *
@@ -35,7 +35,7 @@ import org.simpleframework.xml.Root;
  */
 @Root(strict=false)
 public class ProductList implements ListResource<Product> {
-    @ElementList(name="product", inline=true, type=com.chargify.core.resources.Customer.class) List<Product> products;
+    @ElementList(name="product", inline=true, type=com.chargify.core.resources.Product.class) List<Product> products;
     
     @Override
     public List<Product> all() {

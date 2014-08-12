@@ -3,7 +3,6 @@ package com.chargify.core.resources.collections;
 import com.chargify.core.resources.Subscription;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
-
 import java.util.List;
 
 @Root(strict=false)

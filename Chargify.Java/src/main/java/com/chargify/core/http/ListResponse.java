@@ -28,7 +28,6 @@ import com.chargify.core.helpers.Persisted;
 import com.chargify.core.resources.collections.ListResource;
 import com.chargify.core.resources.Resource;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

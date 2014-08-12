@@ -27,8 +27,6 @@ package com.chargify.core.resources;
 import com.chargify.core.http.Client;
 import com.chargify.core.http.ClientFactory;
 import com.github.kevinsawicki.http.HttpRequest;
-
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.simpleframework.xml.Element;
@@ -37,6 +35,7 @@ import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import java.util.*;
 
 /**
  * A product family is a grouping of related products

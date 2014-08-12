@@ -26,7 +26,6 @@ package com.chargify.core.http;
 
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

@@ -25,7 +25,6 @@
 package com.chargify.core.helpers;
 
 import com.chargify.core.resources.Resource;
-
 import java.lang.reflect.Field;
 
 public class Persisted {
