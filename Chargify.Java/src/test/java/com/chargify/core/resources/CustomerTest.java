@@ -12,9 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.easymock.EasyMockSupport;
-
 import static org.easymock.EasyMock.expect;
-
 import static org.junit.Assert.*;
 
 public class CustomerTest extends EasyMockSupport {

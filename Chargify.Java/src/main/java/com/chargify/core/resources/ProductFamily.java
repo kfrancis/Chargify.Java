@@ -26,29 +26,65 @@ package com.chargify.core.resources;
 
 import com.chargify.core.http.Client;
 import com.chargify.core.http.ClientFactory;
+import com.chargify.core.http.ListResponse;
+import com.chargify.core.http.Response;
+import com.chargify.core.resources.collections.ProductFamilyList;
 import com.github.kevinsawicki.http.HttpRequest;
+import java.util.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.simpleframework.xml.Default;
+import org.simpleframework.xml.DefaultType;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import java.util.*;
 
 /**
  * A product family is a grouping of related products
  * @see <a href="https://docs.chargify.com/product-families">https://docs.chargify.com/product-families</a>
  */
 @Root(strict=false)
+@Default(DefaultType.FIELD)
 public class ProductFamily extends Resource {
     
-    @Getter @Setter @Element private Integer id = null;
-    @Getter @Setter @Element(name="accounting_code") private String accountingCode = null;
-    @Getter @Setter @Element private String description = null;
-    @Getter @Setter @Element private String handle = null;
-    @Getter @Setter @Element private String name = null;
+    @Getter @Setter @Element(required=false) private Integer id = null;
+    @Getter @Setter @Element(required=false, name="accounting_code") private String accountingCode = null;
+    @Getter @Setter @Element(required=false) private String description = null;
+    @Getter @Setter @Element(required=false) private String handle = null;
+    @Getter @Setter @Element(required=false) private String name = null;
+    
+    /**
+     * Represents the product family as a hash
+     * @return a hash of all the product family input attributes
+     */
+    @Override
+    public HashMap<String,String> asHash() {
+        HashMap<String, String> hash = new HashMap<>();
+        guard("product_family[accounting_code]", this.getAccountingCode(), hash);
+        guard("product_family[description]",     this.getDescription(),    hash);
+        guard("product_family[handle]",          this.getHandle(),         hash);
+        guard("product_family[name]",            this.getName(),           hash);
+        return hash;
+    }
+    
+    public Response<ProductFamily> _save(Client client) throws Exception {
+        HttpRequest request = this.isPersisted() ?
+                client.put("product_families/"+id, this.asHash()) :
+                client.post("product_families", this.asHash());
+        return new Response<ProductFamily>(request.code(), request.body(), ProductFamily.class);
+    }
+    
+    /**
+     * Creates or updates a product family record in Chargify
+     * @return A product family response object from the request
+     * @throws Exception
+     */
+    public Response<ProductFamily> save() throws Exception {
+        return _save(ClientFactory.build());
+    }
     
     /**
      * Retrieve details about a specific product family
@@ -57,15 +93,9 @@ public class ProductFamily extends Resource {
      * @return              The details of the product family
      * @throws Exception
      */
-    public static ProductFamily find(Client client, int id) throws Exception {
+    public static Response<ProductFamily> _find(Client client, int id) throws Exception {
         HttpRequest request = client.get("product_families/" + id);
-        if(request.ok()) {
-            Serializer deserializer = new Persister();
-            return deserializer.read(ProductFamily.class, request.body());
-        }
-        else {
-            throw new RecordNotFoundException("Product family " + id + " not found");
-        }
+        return new Response<ProductFamily>(request.code(), request.body(), ProductFamily.class);
     }
     
     /**
@@ -74,8 +104,8 @@ public class ProductFamily extends Resource {
      * @return              The details of the product family
      * @throws Exception
      */
-    public static ProductFamily find(int id) throws Exception {
-        return find(ClientFactory.build(), id);
+    public static Response<ProductFamily> find(int id) throws Exception {
+        return _find(ClientFactory.build(), id);
     }
     
     /**
@@ -85,15 +115,9 @@ public class ProductFamily extends Resource {
      * @return              The details of the product family
      * @throws Exception
      */
-    public static ProductFamily findByHandle(Client client, String handle) throws Exception {
+    public static Response<ProductFamily> _findByHandle(Client client, String handle) throws Exception {
         HttpRequest request = client.get("product_families/handle/" + handle);
-        if(request.ok()) {
-            Serializer deserializer = new Persister();
-            return deserializer.read(ProductFamily.class, request.body());
-        }
-        else {
-            throw new RecordNotFoundException("Product family " + handle + " not found");
-        }
+        return new Response<ProductFamily>(request.code(), request.body(), ProductFamily.class);
     }
     
     /**
@@ -102,8 +126,8 @@ public class ProductFamily extends Resource {
      * @return              The details of the product family
      * @throws Exception
      */
-    public static ProductFamily findByHandle(String handle) throws Exception {
-        return findByHandle(ClientFactory.build(), handle);
+    public static Response<ProductFamily> findByHandle(String handle) throws Exception {
+        return _findByHandle(ClientFactory.build(), handle);
     }
     
     /**
@@ -112,14 +136,9 @@ public class ProductFamily extends Resource {
      * @return              The list of product families
      * @throws Exception
      */
-    public static List<ProductFamily> all(Client client) throws Exception {
+    public static ListResponse<ProductFamily, ProductFamilyList> _all(Client client) throws Exception {
         HttpRequest request = client.get("product_families");
-        Serializer deserializer = new Persister();
-        if (request.ok()){ 
-            return deserializer.read(ProductFamilyList.class, request.body()).getProductFamilies();
-        } else {
-            throw new Exception("Could not parse /product_families.xml. Please verify your credentials.");
-        }
+        return new ListResponse<ProductFamily, ProductFamilyList>(request.code(), request.body(), ProductFamily.class, ProductFamilyList.class);
     }
     
     /**
@@ -127,31 +146,15 @@ public class ProductFamily extends Resource {
      * @return              The list of product families
      * @throws Exception
      */
-    public static List<ProductFamily> all() throws Exception {
-        return all(ClientFactory.build());
+    public static ListResponse<ProductFamily, ProductFamilyList> all() throws Exception {
+        return _all(ClientFactory.build());
     }
     
-    public static ProductFamily create() throws Exception {
-        throw new NotImplementedException();
-    }
-    
-    public static ProductFamily update() throws Exception {
-        throw new NotImplementedException();
-    }
-    
-    public static ProductFamily delete() throws Exception {
+    public static Response<ProductFamily> delete() throws Exception {
         throw new NotImplementedException();
     }
 
     @Override public boolean canEqual(Object other) {
         return (other instanceof ProductFamily);
-    }
-
-    @Root(strict=false)
-    private static class ProductFamilyList {
-        @ElementList(name="product_family", inline=true) List<ProductFamily> product_families;
-        public List<ProductFamily> getProductFamilies() {
-            return product_families;
-        }
     }
 }

@@ -92,7 +92,7 @@ public class Product extends Resource {
     
     /**
      * Represents the product record as a hash
-     * @return a hash of all the product attributes
+     * @return a hash of all the product input attributes
      */
     @Override
     public HashMap<String,String> asHash() {
@@ -130,8 +130,6 @@ public class Product extends Resource {
     public static Response<Product> find(int id) throws Exception {
         return _find(ClientFactory.build(), id);
     }
-    
-    
     
     /**
      * Retrieve the product details using the product handle
