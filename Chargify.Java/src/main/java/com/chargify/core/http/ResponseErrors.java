@@ -92,4 +92,9 @@ public class ResponseErrors implements Iterable<String>, Iterator<String> {
     public void add(String error) {
         errors.add(error);
     }
+
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

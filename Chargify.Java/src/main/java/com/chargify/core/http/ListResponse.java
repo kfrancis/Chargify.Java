@@ -111,4 +111,9 @@ public class ListResponse<T extends Resource, S extends ListResource> extends Re
 
         resources = new ArrayList<>();
     }
+
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
