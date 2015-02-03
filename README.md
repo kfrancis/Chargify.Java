@@ -1,4 +1,4 @@
-Chargify.Java
+Chargify.Java [![Build Status](https://travis-ci.org/kfrancis/Chargify.Java.svg)](https://travis-ci.org/kfrancis/Chargify.Java)
 =============
 
 WIP! (we are still working on internals) 
