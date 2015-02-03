@@ -101,4 +101,21 @@ public class Allocation extends Resource {
         HttpRequest request = client.get("subscriptions/" + subscriptionId + "/components/allocations");
         return new ListResponse<Allocation, AllocationList>(request.code(), request.body(), Allocation.class, AllocationList.class);
     }
+    
+    /**
+     * Method for creating a component allocation
+     * @return The allocation details
+     * @throws Exception
+     */
+    public Response<Allocation> save() throws Exception {
+        return _save(ClientFactory.build());
+    }
+    
+    public Response<Allocation> _save(Client client) throws Exception {
+        HttpRequest request = this.isPersisted() ?
+                client.put("subscriptions/" + this.subscriptionId + "/components/" + this.componentId + "/allocations", this.asHash()) :
+                client.post("subscriptions/" + this.subscriptionId + "/components/" + this.componentId + "/allocations", this.asHash());
+
+        return new Response<Allocation>(request.code(), request.body(), Allocation.class);
+    }
 }
