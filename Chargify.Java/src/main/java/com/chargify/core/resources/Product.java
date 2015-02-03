@@ -68,11 +68,11 @@ public class Product extends Resource {
     @Getter @Setter @Element(required=false, name="trial_price_in_cents") private Integer trialPriceInCents = null;
     @Getter @Setter @Element(required=false, name="update_return_url") private String updateReturnUrl = null;
     
-    @Getter @Setter @Element private ProductFamily productFamily = null;
+    @Getter @Setter @Element(required=false, name="product_family") private ProductFamily productFamily = null;
     
-    @Getter @Element(name="archived_at") private Date archivedAt = null;
-    @Getter @Element(name="created_at") private Date createdAt = null;
-    @Getter @Element(name="updated_at") private Date updatedAt = null;
+    @Getter @Element(required=false, name="archived_at") private Date archivedAt = null;
+    @Getter @Element(required=false, name="created_at") private Date createdAt = null;
+    @Getter @Element(required=false, name="updated_at") private Date updatedAt = null;
     
     /**
      * Creates or updates a record in Chargify.
