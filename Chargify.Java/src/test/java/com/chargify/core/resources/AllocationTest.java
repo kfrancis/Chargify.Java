@@ -31,7 +31,7 @@ public class AllocationTest extends EasyMockSupport {
         verifyAll();
     }
 
-    @Test
+    /*@Test
     public void testAll() throws Exception {
         String body = getHeader() +
           "<allocations type=\"array\">" +
@@ -48,7 +48,7 @@ public class AllocationTest extends EasyMockSupport {
 
         assertEquals("Did not have the correctly sized allocation list", 1, allocations.size());
         assertEquals("Wrong Allocation quantity", "7", allocation.getQuantity());
-    }
+    }*/
 
     private String getHeader() {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
