@@ -1,4 +1,5 @@
 language: java
 jdk:
   - openjdk7
-script: mvn install -DskipTests=true
+before_install: mvn install -DskipTests=true -f ./Chargify.Java/pom.xml
+script: mvn test -f ./Chargify.Java/pom.xml
